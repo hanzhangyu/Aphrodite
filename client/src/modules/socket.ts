@@ -1,3 +1,6 @@
+/**
+ * @file send data
+ */
 import Socket from 'classes/socket';
 
 interface SocketMsg {
@@ -8,31 +11,36 @@ interface SocketMsg {
 
 let socket: Socket;
 
-function decode(data: SocketMsg) : SocketMsg {
-    return data;
+function decode(data: [number, string]) :  SocketMsg {
+    return {
+        code: data[0],
+        msg: data[1],
+    };
 }
 
-function encode(data: SocketMsg) : SocketMsg {
-    return data;
+function encode(data: SocketMsg) :  [number, string] {
+    return [data.code, data.msg];
 }
 
-function send(data: String) : any;
-function send(data: SocketMsg) : any;
-function send(data) {
-    if (!socket) {
-        socket = new Socket();
-    }
-    
-    if (typeof data === 'string') {
-        socket.send(encode({
-            code: 0,
-            msg: data,
-        }))
-    } else {
-        socket.send(encode(data))
-    }
+function init() {
+    // if (!socket) {
+        // socket = new Socket(console.log);
+    // }
+    // TODO open socket
+}
+
+// function send(data: String) : any;
+// function send(data: SocketMsg) : any;
+function send(code: number, msg: string) {
+    // if (!socket) {
+    //     socket = new Socket(console.log);
+    // }
+
+    // socket.send(encode({code, msg}))
+    // TODO send
 }
 
 export default {
     send,
+    init,
 }

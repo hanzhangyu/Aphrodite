@@ -28,6 +28,8 @@ let config = function (env) {
         'src': path.resolve(__dirname, 'src/'),
         'assets': path.resolve(__dirname, 'src/assets/'),
         'classes': path.resolve(__dirname, 'src/classes/'),
+        'components': path.resolve(__dirname, 'src/components/'),
+        'utils': path.resolve(__dirname, 'src/utils/'),
       }
     },
     
@@ -54,14 +56,6 @@ let config = function (env) {
         {
           test: /\.svg$/, 
           loader: 'url-loader'
-        },
-        {
-          test: /\.scss$/, 
-          loader: [ 'css-loader', 'sass-loader']
-        },
-        {
-          test: /\.sass$/, 
-          loader: [ 'css-loader', 'sass-loader?indentedSyntax']
         },
         {
           test: /\.tsx?$/,
@@ -99,18 +93,29 @@ let config = function (env) {
     returner.plugins.push(new CordovaHtmlOutputPlugin())
     returner.plugins.push(new ExtractTextPlugin("styles.css"))
     returner.module.rules.push({
-      test: /\.css$/, use: ExtractTextPlugin.extract({
+      test: /\.scss$/, use: ExtractTextPlugin.extract({
         fallback: "style-loader",
-        use: "css-loader"
+        use: [
+          {
+              loader: 'css-loader',
+              options: {
+                  minimize: true
+              }
+          },
+          {
+              loader: 'sass-loader'
+          }
+      ]
       })
+    })
+  } else {
+    returner.module.rules.push({
+      test: /\.scss$/, loader: ['style-loader', 'css-loader', 'sass-loader']
     })
   }
   
   if (env) {
     if (typeof env.devserver !== 'undefined' && env.devserver) {
-      returner.module.rules.push({
-        test: /\.css$/, loader: ['style-loader', 'css-loader']
-      })
       returner.entry = [
         entryFile,
         path.resolve(__dirname, "webpack/dev_helpers/CordovaDeviceRouter.js")

@@ -1,4 +1,4 @@
-const WebSocket = require('ws')
+import WebSocket from 'ws';
 
 const wss = new WebSocket.Server({
     host: '0.0.0.0',
@@ -8,7 +8,7 @@ const wss = new WebSocket.Server({
 wss.on('connection', ws => {
     console.log('connect');
     ws.on('message', message => {
-        console.log(`Received message => ${message}`)
+        console.log(`Received message => ${JSON.parse(message)}`)
     })
     ws.send('ho!')
 })

@@ -29,5 +29,6 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <allow-navigation href="*" />
+    <preference name="Orientation" value="landscape" />
     <engine name="android" spec="^7.1.4" />
 </widget>

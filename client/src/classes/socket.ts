@@ -31,8 +31,8 @@ export default class Socket {
         });
     }
 
-    send(msg) {
-        this.socket.send(msg);
+    send(msg: Array<any>) {
+        this.socket.send(JSON.stringify(msg));
     }
 
     desotry() {
