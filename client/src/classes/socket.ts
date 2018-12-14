@@ -2,14 +2,14 @@ const { string: ssl, string: server } = process.env;
 
 export default class Socket {
     socket: WebSocket;
-    isReconnecting: Boolean;
+    isReconnecting: boolean;
 
     constructor(public listener: Function) {
         this.socket = null;
         this.isReconnecting = false;
     }
 
-    async open (isReconnecting: Boolean){
+    async open (isReconnecting: boolean){
         if (this.socket && this.isOpen) return;
 
         this.socket = new WebSocket(`${ssl ? 'wss' : 'ws'}://${server}`);
@@ -36,7 +36,7 @@ export default class Socket {
     }
 
     desotry() {
-        this.socket && this.socket.close(1, "destory");
+        this.socket && this.socket.close(1, "destroy");
     }
 
     get isOpen() {

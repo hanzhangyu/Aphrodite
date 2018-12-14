@@ -18,10 +18,10 @@ export default class Shape {
     }
 
     drawLine() {
-        
+
     }
 
-    // isCrash(bg: Background) : Boolean {
+    // isCrash(bg: Background) : boolean {
     //     return bg.isCrash(this);
     // }
 

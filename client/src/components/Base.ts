@@ -3,16 +3,23 @@
  * @constructor
  */
 
-export default class Base {
-    isDestory: Boolean
+export default abstract class Base {
+    protected readonly width: number;
+    protected readonly height: number;
+    public isDestroy: boolean;
 
-    constructor(
+    protected constructor(
         public readonly id: number,
     ) {
-        
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
     }
 
-    destory() {
-        this.isDestory = true;
+    destroy() {
+        this.isDestroy = true;
     };
+
+    shouldAlive() {
+        return true;
+    }
 }
