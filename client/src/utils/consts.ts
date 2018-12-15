@@ -8,7 +8,17 @@ export enum BG_TYPE {
     OBSTACLE = 1,
 }
 
-export const TREE_MAX_BRANCH_DISTANCE = 10; // the max length of the branch span width
-export const TREE_MAX_SPREAD_DEPTH = 7; // the max depth for branch spread
-export const TREE_BRANCH_SPAN_DISTANCE = 20; // the length of the branch span height
-export const TREE_SPREAD_PROBABILITY = 0.6; // the probability of spread
+export enum CANVAS_TYPE {
+    TYPE_STAGE = 'stage', // like character, bullet, barrier
+    TYPE_BG = 'bg', // the background does not affect to user
+}
+
+export enum GAME_STATUS {
+    INIT = 0,
+    WAIT = 1,
+    GAME = 2,
+}
+
+export interface AnyObject {
+    [key: string]: any
+}
