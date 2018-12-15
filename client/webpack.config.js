@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const yml = require('js-yaml');
-  
+
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CordovaHtmlOutputPlugin = require('./webpack/plugins/CordovaHtmlOutputPlugin.js');
@@ -10,7 +10,7 @@ const CleanPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const envConfig = yml.safeLoad(fs.readFileSync('./env.yml', 'utf8'));
-  
+
 const entryFile = path.join(__dirname, 'src/main.ts');
 const devServerPort = 8081;
 
@@ -20,7 +20,7 @@ let config = function (env) {
   let returner = {
     entry: entryFile,
     mode: envName,
-    
+
     resolve: {
       extensions: ['.js', '.json', '.ts'],
       modules: [path.join(__dirname, 'src'), 'node_modules'],
@@ -32,7 +32,7 @@ let config = function (env) {
         'utils': path.resolve(__dirname, 'src/utils/'),
       }
     },
-    
+
     output: {
       pathinfo: true,
       devtoolLineToLine: true,
@@ -40,21 +40,21 @@ let config = function (env) {
       sourceMapFilename: "[hash].[name].js.map",
       path: path.join(__dirname, 'www')
     },
-    
+
     module: {
       rules: [
         {
-          test: /\.(png|jpe?g|gif)$/, 
-          loader: 'file-loader', 
+          test: /\.(png|jpe?g|gif)$/,
+          loader: 'file-loader',
           options: {name: '[name].[ext]?[hash]'}
         },
         {
-          test: /\.(woff2?|eot|ttf|otf|mp3|wav)(\?.*)?$/, 
-          loader: 'file-loader', 
+          test: /\.(woff2?|eot|ttf|otf|mp3|wav)(\?.*)?$/,
+          loader: 'file-loader',
           options: {name: '[name].[ext]?[hash]'}
         },
         {
-          test: /\.svg$/, 
+          test: /\.svg$/,
           loader: 'url-loader'
         },
         {
@@ -64,7 +64,7 @@ let config = function (env) {
         }
       ]
     },
-    
+
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
@@ -88,7 +88,7 @@ let config = function (env) {
       }),
     ]
   }
-  
+
   if (typeof env === 'undefined' || typeof env.devserver === 'undefined') {
     returner.plugins.push(new CordovaHtmlOutputPlugin())
     returner.plugins.push(new ExtractTextPlugin("styles.css"))
@@ -113,7 +113,7 @@ let config = function (env) {
       test: /\.scss$/, loader: ['style-loader', 'css-loader', 'sass-loader']
     })
   }
-  
+
   if (env) {
     if (typeof env.devserver !== 'undefined' && env.devserver) {
       returner.entry = [
@@ -147,7 +147,7 @@ let config = function (env) {
       returner.plugins.push(new UglifyJsPlugin())
     }
   }
-  
+
   return returner
 }
 
