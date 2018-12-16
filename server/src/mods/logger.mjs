@@ -3,11 +3,13 @@ import pino from 'pino';
 import CONFIG from './config';
 
 const output = CONFIG.isDev ? undefined : pino.extreme('.log');
+const prettyPrint = CONFIG.isDev ? { colorize: true } : false;
 
 const logger = pino(
     {
         name: CONFIG.name,
-        level: CONFIG.logLevel
+        level: CONFIG.logLevel,
+        prettyPrint,
     },
     output,
 );
