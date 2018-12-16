@@ -1,9 +1,9 @@
 .vscode/
-env.yml
-
 
 client/node_modules/
 client/www/
 client/platforms/
+client/env.yml
 
 server/node_modules/
+server/env.yml

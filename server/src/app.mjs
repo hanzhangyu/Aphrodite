@@ -15,14 +15,14 @@ class App {
             host: CONFIG.host,
             port: CONFIG.port,
             path: CONFIG.path,
-            verifyClient: this.verifyClient,
+            verifyClient: this.verifyClient.bind(this),
         })
-            .on('connection', this.onConnection)
-            .on('error', this.onError);
+            .on('connection', this.onConnection.bind(this))
+            .on('close', this.onClose.bind(this));
     }
 
-    onError(err) {
-        this.logger.error(err);
+    onClose() {
+        this.logger.warn('closed');
     }
 
     onConnection(ws) {
