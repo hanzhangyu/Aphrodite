@@ -69,7 +69,9 @@ let config = function (env) {
       new webpack.DefinePlugin({
         'process.env': {
           'NODE_ENV': JSON.stringify(envName),
-          ...envConfig[envName],
+          ...Object.assign({}, ...Object.entries(envConfig[envName]).map((keyValue)  => {
+            return {[keyValue[0]]: JSON.stringify(keyValue[1])}
+          })),
         }
       }),
       new HtmlWebpackPlugin({
@@ -87,11 +89,11 @@ let config = function (env) {
         }
       }),
     ]
-  }
+  };
 
   if (typeof env === 'undefined' || typeof env.devserver === 'undefined') {
-    returner.plugins.push(new CordovaHtmlOutputPlugin())
-    returner.plugins.push(new ExtractTextPlugin("styles.css"))
+    returner.plugins.push(new CordovaHtmlOutputPlugin());
+    returner.plugins.push(new ExtractTextPlugin("styles.css"));
     returner.module.rules.push({
       test: /\.scss$/, use: ExtractTextPlugin.extract({
         fallback: "style-loader",
