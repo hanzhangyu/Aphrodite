@@ -6,7 +6,7 @@ import {
     TREE_MAX_SPREAD_DEPTH,
     TREE_BRANCH_SPAN_DISTANCE,
     TREE_SPREAD_PROBABILITY,
-} from 'utils/consts';
+} from 'utils/config';
 
 export default class BaseTree extends Base {
     constructor(
@@ -34,7 +34,7 @@ export default class BaseTree extends Base {
             this.ctx.beginPath();
             this.ctx.moveTo(0, 0);
             this.ctx.lineTo(0, -(this.height)/TREE_BRANCH_SPAN_DISTANCE);
-            this.ctx.fillStyle = 'black';
+            this.ctx.strokeStyle = '#ffffff';
             this.ctx.stroke();
 
             // move to the current branch endpoint
@@ -65,7 +65,7 @@ export default class BaseTree extends Base {
                 this.drawBranch(depth);
             }
         } else {
-            this.ctx.fillStyle = '#fff';
+            this.ctx.fillStyle = '#764A63';
             this.ctx.fillRect(0, 0, 50, 50);
             this.ctx.stroke();
         }

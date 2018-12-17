@@ -1,47 +1,76 @@
 import {cloneDeep} from 'lodash';
 import bgData from 'assets/json/background.json';
 import enemy from 'assets/json/enemy.json';
-import {DATA_TYPE, AnyObject} from 'utils/consts';
+import {DATA_TYPE, SOCKET_FETCH_TIMEOUT, AnyObject, ListenerObject} from 'utils/consts';
 
-const context : {[key: string]: CanvasRenderingContext2D} = {};
+const context: { [key: string]: CanvasRenderingContext2D } = {};
+const user: {
+    valid: boolean;
+    name: string;
+} = {valid: false, name: null};
 const INIT_STORE_DATA = {
-    user: {},
+    user,
     distance: 0,
     context,
 };
 
 class Store {
     private state: object;
+    private readonly listener: ListenerObject;
 
     constructor() {
         this.state = cloneDeep(INIT_STORE_DATA);
+        this.listener = {};
     }
 
-    // getState(type: DATA_TYPE) {
-    //     switch (type) {
-    //         case DATA_TYPE.BACKGROUND:
-    //             return bgData;
-    //         default:
-    //             return enemy;
-    //     }
-    // }
-    getState(...keys : string[]) {
+    getState(...keys: string[]) {
         return keys.reduce((obj: AnyObject, key: string) => obj[key], this.state)
     }
+
     setState(value: any, ...keys: string[]) {
-        return keys.reduce((obj: AnyObject, key: string, index: number) => {
+        keys.reduce((obj: AnyObject, key: string, index: number) => {
             if (index !== keys.length - 1) {
                 return obj[key];
             }
             obj[key] = value;
             return value;
         }, this.state);
+
+        const listeners = this.listener[keys.join('.')];
+        if (listeners && listeners.length > 0) {
+            listeners.forEach(listener => {
+                listener(value);
+            })
+        }
     }
+
+    listen(key: string) {
+        return new Promise((resolve, reject) => {
+            if (!this.listener[key]) {
+                this.listener[key] = [];
+            }
+
+            this.listener[key].push(resolve);
+            setTimeout(() => {
+                const index = this.listener[key].indexOf(resolve);
+                if (index >= 0) {
+                    this.listener[key].splice(index, 1);
+                    reject(new Error('timeout'));
+                }
+                console.log('[STORE LISTENERS]', this.listener);
+            }, SOCKET_FETCH_TIMEOUT)
+        })
+    }
+
     isOutOfScreen(pointers: [[number, number]]): boolean {
         // TODO calculate the current distance span
         return pointers.every((pointer) => {
             return true
         })
+    }
+
+    resetState() {
+        this.state = cloneDeep(INIT_STORE_DATA);
     }
 }
 

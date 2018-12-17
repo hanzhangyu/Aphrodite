@@ -1,5 +1,5 @@
 export default class Shape {
-    private pointers: Array<[number, number]>
+    protected pointers: Array<[number, number]> = [];
 
     constructor(
         public ctx: CanvasRenderingContext2D,
@@ -7,6 +7,8 @@ export default class Shape {
     }
 
     draw() {
+        this.ctx.save();
+        this.ctx.fillStyle = '#fff';
         this.ctx.beginPath();
         this.ctx.moveTo(...this.pointers[0]);
         for (let i = 1; i < this.pointers.length; i++) {
@@ -15,6 +17,7 @@ export default class Shape {
         this.ctx.lineTo(...this.pointers[0]);
         this.ctx.fill();
         this.ctx.stroke();
+        this.ctx.restore();
     }
 
     drawLine() {

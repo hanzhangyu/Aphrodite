@@ -1,5 +1,6 @@
 import Base from 'components/Base';
 import BaseTree from 'components/BaseTree';
+import store from 'modules/store';
 import { DATA_TYPE } from 'utils/consts';
 
 interface Actor {
@@ -8,28 +9,20 @@ interface Actor {
 }
 
 export default class Background extends Base {
-    private trees: Array<BaseTree>;
+    private trees: Array<BaseTree> = [];
     constructor(
-        public readonly id: number,
+        id: number,
         public ctx: CanvasRenderingContext2D,
     ) {
         super(id);
     }
 
     draw() {
-        this.drawFog();
+        this.clear();
         this.trees.forEach(tree => {
             tree.draw();
         });
         // TODO clear the old tree and create the new tree
-    }
-
-    drawFog() {
-        const gradient = this.ctx.createLinearGradient(0, this.height, 0, 0);
-        gradient.addColorStop(0,"rgba(255,255,255,0.4)");
-        gradient.addColorStop(1,"rgba(255,255,255,0)");
-        this.ctx.fillStyle = gradient;
-        this.ctx.fillRect(0, 0, this.width, this.height);
     }
 
     drawLine() {
@@ -39,4 +32,8 @@ export default class Background extends Base {
     isCrash(component: Base) : boolean {
         return false;
     }
+
+    clear() {
+        this.ctx.clearRect(0, 0, this.width, this.height);
+    };
 }
