@@ -1,4 +1,5 @@
 @import './__vars';
+@import './animate.scss';
 
 body,
 html {
@@ -15,12 +16,24 @@ html {
 	user-select: none;
 }
 
+canvas {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#stageCanvas {
+	z-index: $indexStage;
+}
+
 .btn {
 	position: absolute;
 	outline: none;
     background-color: $buttonBgColor;
 	border: 5px solid $buttonBgColor;
-	z-index: 1;
+	z-index: $indexControl;
 
 	&.active {
 		border-color: $buttonActiveBgColor;
@@ -86,3 +99,42 @@ html {
 	bottom: 40px;
 	left: 100px;
 }
+
+#notify {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	text-align: center;
+	opacity: 0;
+	z-index: $indexNotify;
+	background-color: rgba(255, 255, 255, 0.8);
+	transition: opacity 2s;
+	font-size: 24px;
+	&.active {
+		opacity: 1;
+	}
+
+	.error {
+		color: #ff8880;
+	}
+
+	.success {
+		color: #2effe7;
+	}
+
+	.info {
+		color: #000;
+	}
+
+	.fa-spinner {
+		animation: rotate 1s linear infinite;
+	}
+}
+
+

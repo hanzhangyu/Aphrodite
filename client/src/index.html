@@ -6,13 +6,18 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
-	<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; connect-src ws://172.17.74.241:3000 wss://paulhan.cn">
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-eval';font-src 'self' data:;style-src 'self' 'unsafe-inline'; media-src *; connect-src http://172.17.74.241:8081 ws://172.17.74.241:8081 ws://172.17.74.241:3000 wss://paulhan.cn">
 	<title>My App</title>
+	<style>
+		.hidden {
+			display: none;
+		}
+	</style>
 	<!-- built style files will be auto injected -->
 </head>
 
 <body>
-	<div id="control">
+	<div id="control" class="hidden">
 		<button class="btn btn-action" id="shoot">A</button>
 		<button class="btn btn-action" id="jump">B</button>
 		<button class="btn btn-action" id="skill">C</button>
@@ -20,6 +25,7 @@
 		<button class="btn btn-direct" id="move_left"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
 		<button class="btn btn-direct active" id="move_right"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
 	</div>
+	<div id="notify" class="hidden"></div>
 	<canvas id="stageCanvas" width="200" height="200"></canvas>
 	<canvas id="bgCanvas" width="200" height="200"></canvas>
 </body>
