@@ -8,7 +8,7 @@ import Ws from 'classes/Ws';
 import store from 'modules/store';
 import notify from 'modules/notify';
 import {delay} from 'utils/helper';
-import {AnyObject, SocketMsg, DATA_TYPE, SOCKET_HEART_BEAT_TIMEOUT, SOCKET_RECONNECT_TIMEOUT, NOTIFY_TYPE} from 'utils/consts';
+import {DATA_TYPE, SOCKET_HEART_BEAT_TIMEOUT, SOCKET_RECONNECT_TIMEOUT, NOTIFY_TYPE} from 'utils/consts';
 
 const { ssl, server } = process.env;
 let socket: Ws;

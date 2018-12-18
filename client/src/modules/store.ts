@@ -1,7 +1,7 @@
 import {cloneDeep} from 'lodash';
 import bgData from 'assets/json/background.json';
 import enemy from 'assets/json/enemy.json';
-import {DATA_TYPE, SOCKET_FETCH_TIMEOUT, AnyObject} from 'utils/consts';
+import {DATA_TYPE, SOCKET_FETCH_TIMEOUT} from 'utils/consts';
 
 const context: { [key: string]: CanvasRenderingContext2D } = {};
 const user: {

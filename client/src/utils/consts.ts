@@ -23,12 +23,6 @@ export enum GAME_STATUS {
     GAME = 2,
 }
 
-export interface AnyObject {
-    [key: string]: any
-}
-export interface SocketMsg {
-    [index: number]: number;
-}
 
 export const SOCKET_HEART_BEAT_TIMEOUT = 10000;
 export const SOCKET_RECONNECT_TIMEOUT = 5000;

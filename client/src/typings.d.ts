@@ -12,3 +12,10 @@ interface NavigatorCordova extends Navigator {
 interface ListenerObject {
     [key: string]: Array<{ (data: any): void }>
 }
+
+interface AnyObject {
+    [key: string]: any
+}
+interface SocketMsg {
+    [index: number]: number;
+}

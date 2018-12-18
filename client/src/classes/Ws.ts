@@ -1,5 +1,3 @@
-import {SocketMsg} from 'utils/consts';
-
 export default class Ws {
     private socket: WebSocket;
 
