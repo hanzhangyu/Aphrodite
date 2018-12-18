@@ -1,6 +1,8 @@
 export enum DATA_TYPE {
     HEART_BEAT = 0,
     CHECK_USERNAME = 1,
+    OVERLOAD = 2,
+    CLOSE = 3,
     BACKGROUND = 122,
     CHARACTER = 222,
 }
@@ -24,10 +26,6 @@ export enum GAME_STATUS {
 export interface AnyObject {
     [key: string]: any
 }
-export interface ListenerObject {
-    [key: string]: Array<{ (data: any): void }>
-}
-
 export interface SocketMsg {
     [index: number]: number;
 }
@@ -43,3 +41,5 @@ export enum NOTIFY_TYPE {
     ERROR = 'error',
     SUCCESS = 'success',
 }
+
+export const VALID_USERNAME_LIST = process.env.username.split('|');

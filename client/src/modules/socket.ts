@@ -6,17 +6,21 @@
  */
 import Ws from 'classes/Ws';
 import store from 'modules/store';
+import notify from 'modules/notify';
 import {delay} from 'utils/helper';
-import {AnyObject, SocketMsg, DATA_TYPE, SOCKET_HEART_BEAT_TIMEOUT, SOCKET_RECONNECT_TIMEOUT} from 'utils/consts';
+import {AnyObject, SocketMsg, DATA_TYPE, SOCKET_HEART_BEAT_TIMEOUT, SOCKET_RECONNECT_TIMEOUT, NOTIFY_TYPE} from 'utils/consts';
 
 const { ssl, server } = process.env;
 let socket: Ws;
 let isReconnecting: boolean = false;
 let timer: number = 0;
-let lastTs: number = null;
+// let lastTs: number = null;
 
 function decode(data: SocketMsg) :  AnyObject {
-    return data;
+    return {
+        code: data[0],
+        msg: data[1],
+    };
 }
 
 function encode(data: AnyObject) :  SocketMsg {
@@ -24,7 +28,7 @@ function encode(data: AnyObject) :  SocketMsg {
 }
 
 function resetHeartBeat() {
-    lastTs = Date.now();
+    // lastTs = Date.now();
     window.clearTimeout(timer);
     timer = window.setTimeout(() => {
         console.log('[SOCKET] heart beat');
@@ -52,10 +56,8 @@ async function open() {
     }
 }
 
-// function send(data: String) : any;
-// function send(data: SocketMsg) : any;
-async function send(code: number, msg?: string) {
-    if (isReconnecting) return;
+async function send(code: number, msg?: string | boolean | number) {
+    if (isReconnecting && store.getState('destroyed')) return;
     await open();
     resetHeartBeat();
 
@@ -63,14 +65,39 @@ async function send(code: number, msg?: string) {
     socket.send(encode({code, msg}))
 }
 
-function handleMessage(data: any) {
-    switch (data[0]) {
+function handleMessage(message: string) {
+    const data = decode(JSON.parse(message));
+    switch (data.code) {
         case DATA_TYPE.CHECK_USERNAME:
-            store.setState(data[1], 'user', 'valid');
+            store.setState(data.msg, 'user', 'valid');
+            break;
+        case DATA_TYPE.OVERLOAD:
+            store.setState(!!data.msg, 'server', 'overload');
+            break;
+        case DATA_TYPE.CLOSE:
+            alert('Someone closed you connection, please ask the room creator!');
+            store.setState(true, 'destroyed');
+            destroy();
+            break;
+        default:
     }
+}
+
+function destroy() {
+    window.clearTimeout(timer);
+    store.destroy();
+    socket.destroy();
+    setTimeout(() => {
+        if (!(navigator as NavigatorCordova).app) {
+            console.warn('[APP EXITED]');
+            return; // test in browser
+        }
+        (navigator as NavigatorCordova).app.exitApp();
+    }, 0);
 }
 
 export default {
     send,
     open,
+    destroy,
 }

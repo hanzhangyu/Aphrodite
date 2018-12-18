@@ -1,6 +1,6 @@
 import process from 'process';
 import pino from 'pino';
-import CONFIG from './config';
+import CONFIG from '../utils/config';
 
 const output = CONFIG.isDev ? undefined : pino.extreme('.log');
 const prettyPrint = CONFIG.isDev ? { colorize: true } : false;

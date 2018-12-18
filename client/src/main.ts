@@ -5,8 +5,11 @@ import Background from 'components/Background';
 import Stage from 'components/Stage';
 import store from 'modules/store';
 import api from 'modules/serverApi';
-import {CANVAS_TYPE, GAME_STATUS} from 'utils/consts';
+import {CANVAS_TYPE, DATA_TYPE, GAME_STATUS, NOTIFY_TYPE} from 'utils/consts';
+import {askForName, checkOverload} from 'utils/helper';
 import serverApi from "./modules/serverApi";
+import notify from "./modules/notify";
+import socket from "./modules/socket";
 
 // init the canvas element
 initCanvas(CANVAS_TYPE.TYPE_STAGE);
@@ -22,26 +25,11 @@ function initCanvas(type: CANVAS_TYPE) {
 const bg = new Background(0, store.getState('context', CANVAS_TYPE.TYPE_BG));
 const stage = new Stage(0, store.getState('context', CANVAS_TYPE.TYPE_STAGE));
 
-const validUsernameList = process.env.username.split('|');
-async function askForName(msg?: string) {
-    let username = window.prompt(`${msg || 'Enter your name'} (${process.env.username})`);
-    if (username || true) {
-        username = username.trim();
-        if (validUsernameList.indexOf(username) !== -1 || true) {
-            const valid = await serverApi.checkName(username);
-            if (valid) {
-                store.setState(username, 'user', 'name');
-            } else {
-                await askForName('This name is existed, re enter:');
-            }
-            return;
-        }
-    }
-    await askForName();
-}
-
 serverApi.init().then(async () => {
-    await askForName();
+    const username = await askForName();
+    const overload = await checkOverload();
+    if (overload || store.getState('destroyed')) return;
+    store.setState(username, 'user', 'name');
     window.requestAnimationFrame(game);
 });
 

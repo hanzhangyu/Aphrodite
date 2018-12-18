@@ -11,6 +11,9 @@ const serverApi = {
     async init() {
         await socket.open();
     },
+    destroy() {
+        socket.destroy();
+    },
     async checkName(username: string) {
         try {
             notify.notify({
@@ -18,8 +21,21 @@ const serverApi = {
                 loading: true,
             });
             await socket.send(DATA_TYPE.CHECK_USERNAME, username);
-            await store.listen('user.valid');
+            await Promise.race([
+                store.listen('user.valid'),
+                store.listen('server.overload')
+            ]);
             notify.hidden();
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+        return true;
+    },
+    async closeOthersConnection() {
+        try {
+            await socket.send(DATA_TYPE.OVERLOAD, true);
+            await store.listen('server.overload');
         } catch (err) {
             console.error(err);
             return false;
