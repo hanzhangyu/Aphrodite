@@ -5,6 +5,7 @@ import logger from './mods/logger';
 import decoder from './mods/decoder';
 import {DATA_TYPE} from "./utils/consts";
 
+const VALID_USERNAME_LIST = CONFIG.username.split('|');
 // TODO valid the user
 let currentKey = null;
 
@@ -24,6 +25,7 @@ class App {
 
         setInterval(() => {
             this.logger.error(this.wss.clients.size);
+            this.logger.error(Array.from(this.wss.clients).map(ws => ws.username));
         }, 2000);
     }
 
@@ -48,7 +50,18 @@ class App {
         switch (data.code) {
             case DATA_TYPE.CHECK_USERNAME:
                 this.logger.debug(`Received name => ${data.msg}`);
-                ws.send(decoder.encode(DATA_TYPE.CHECK_USERNAME, true));
+                // TODO refactor use room id && cookie
+                ws.username = data.msg;
+                let isValid = VALID_USERNAME_LIST.indexOf(ws.username) >= 0;
+                if (isValid) {
+                    for (let item of this.wss.clients.values()) {
+                        if (item !== ws && item.username === ws.username) {
+                            isValid = false;
+                            break;
+                        }
+                    }
+                }
+                ws.send(decoder.encode(DATA_TYPE.CHECK_USERNAME, isValid));
                 break;
             case DATA_TYPE.OVERLOAD:
                 // clear the ws pool
@@ -58,10 +71,6 @@ class App {
                     }
                 }
                 ws.send(decoder.encode(DATA_TYPE.OVERLOAD, false));
-                console.log(this.wss.clients.size);
-                setTimeout(() => {
-                    console.info(this.wss.clients.size)
-                }, 2000);
                 break;
             default:
         }

@@ -11,6 +11,9 @@ import serverApi from "./modules/serverApi";
 import notify from "./modules/notify";
 import socket from "./modules/socket";
 
+//@ts-ignore
+window.store = store;
+
 // init the canvas element
 initCanvas(CANVAS_TYPE.TYPE_STAGE);
 initCanvas(CANVAS_TYPE.TYPE_BG);

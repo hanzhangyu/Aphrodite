@@ -17,10 +17,11 @@ export function delay(timeout: number) : Promise<void> {
 
 export async function askForName(msg?: string) : Promise<string> {
     let username = window.prompt(`${msg || 'Enter your name'} (${process.env.username})`);
-    if (username || true) {
+    if (username) {
         username = username.trim();
-        if (VALID_USERNAME_LIST.indexOf(username) !== -1 || true) {
+        if (VALID_USERNAME_LIST.indexOf(username) !== -1) {
             const valid = await serverApi.checkName(username);
+            console.log('valid', valid);
             if (valid) {
                 return username;
             } else {
