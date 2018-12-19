@@ -44,6 +44,10 @@ async function open() {
             socket = new Ws(`${ssl ? 'wss' : 'ws'}://${server}`, handleMessage);
             resetHeartBeat();
             await socket.open();
+            const name = store.getState('user', 'name');
+            if (name) {
+                await send(DATA_TYPE.CHECK_USERNAME, name);
+            }
             isReconnecting = false;
         }
     } catch (err) {
