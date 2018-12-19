@@ -113,7 +113,7 @@
     });
 
     function startRedirectChecks() {
-        testConnection('127.0.0.1:8081', goUrl, function () {
+        testConnection('192.168.100.2:8081', goUrl, function () {
             testConnection(localServerIp + ':8081', goUrl, ajaxErr)
         })
     }
@@ -134,20 +134,7 @@
         document.querySelector("#status_text").innerText = "Trying to connect http://" + ipPort;
 
         xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                document.querySelector("#status_text").innerText = "Connection to 'http://" + ipPort + "/' success! Redirecting...";
-
-                if (typeof callback === "function")
-                    callback(ipPort);
-            }
-            else if (xhr.readyState === 4 && xhr.status !== 200) {
-                document.querySelector("button").disabled = false;
-                document.querySelector("input").disabled = false;
-                document.querySelector("#status_text").innerText = "Connection to 'http://" + ipPort + "/' failed!";
-
-                if (typeof errCallback === "function")
-                    errCallback(ipPort);
-            }
+            callback(ipPort);
         }
 
         xhr.open('GET', 'http://' + ipPort + '/');
