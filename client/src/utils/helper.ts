@@ -20,12 +20,13 @@ export async function askForName(msg?: string) : Promise<string> {
     if (username) {
         username = username.trim();
         if (VALID_USERNAME_LIST.indexOf(username) !== -1) {
-            const valid = await serverApi.checkName(username);
-            console.log('valid', valid);
+            await serverApi.checkName(username);
+            const valid = store.getState('user', 'valid');
+             console.log('valid', valid);
             if (valid) {
                 return username;
             } else {
-                await askForName('This name is existed, re enter:');
+                return await askForName('This name is existed, re enter:');
             }
         }
     }
