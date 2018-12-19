@@ -23,11 +23,27 @@ class Store {
     private state: object;
     private listener: ListenerObject;
     private isDestroy: boolean;
+    private lastId: number;
+    private timestamp: number;
+    private timestampSpan: number;
 
     constructor() {
         this.state = cloneDeep(INIT_STORE_DATA);
         this.listener = {};
         this.isDestroy = false;
+        this.lastId = 0;
+        this.timestamp = 0;
+        this.timestampSpan = 0;
+    }
+
+    updateTime() {
+        const now = Date.now();
+        this.timestampSpan = now - this.timestamp;
+        this.timestamp = now;
+    }
+
+    getNewId() : number {
+        return this.lastId++;
     }
 
     getState(...keys: string[]) {

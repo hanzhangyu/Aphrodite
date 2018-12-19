@@ -5,11 +5,12 @@ import Background from 'components/Background';
 import Stage from 'components/Stage';
 import store from 'modules/store';
 import api from 'modules/serverApi';
-import {CANVAS_TYPE, DATA_TYPE, GAME_STATUS, NOTIFY_TYPE} from 'utils/consts';
+import {CANVAS_TYPE, DATA_TYPE, GAME_STATUS, NOTIFY_TYPE, VALID_USERNAME_LIST} from 'utils/consts';
 import {askForName, checkOverload} from 'utils/helper';
 import serverApi from "./modules/serverApi";
 import notify from "./modules/notify";
 import socket from "./modules/socket";
+import Triangle from "./components/shape/Triangle";
 
 //@ts-ignore
 window.store = store;
@@ -33,17 +34,17 @@ serverApi.init().then(async () => {
     const overload = await checkOverload();
     if (overload || store.getState('destroyed')) return;
     store.setState(username, 'user', 'name');
+    if (username === VALID_USERNAME_LIST[0]) {
+        stage.createAllPlayer(username);
+    }
     window.requestAnimationFrame(game);
 });
 
 function game() {
-    store.setState(Date.now(), 'timestamp');
+    store.updateTime();
     bg.draw();
     stage.draw();
     switch (store.getState('status')) {
-        case GAME_STATUS.INIT:
-            // TODO ask for name
-            break;
         case GAME_STATUS.WAIT:
             // TODO wait for anther player
             break;

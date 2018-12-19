@@ -6,3 +6,6 @@ export const TREE_SPREAD_PROBABILITY = 0.6; // the probability of spread
 // TODO refactor
 export const TRIANGLE_SIZE = 50;
 export const SQUARE_SIZE = 50;
+
+export const PLAYER_SPEED = 2;
+export const PLAYER_JUMP_INIT_SPEED = 100; // (1/s)

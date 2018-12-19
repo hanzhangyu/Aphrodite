@@ -37,3 +37,5 @@ export enum NOTIFY_TYPE {
 }
 
 export const VALID_USERNAME_LIST = process.env.username.split('|');
+
+export const GRAVITATIONAL_ACCELERATION = 9.78;
