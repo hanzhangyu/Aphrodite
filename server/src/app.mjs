@@ -39,7 +39,7 @@ class App {
         if (this.wss.clients.size > 2) {
             return ws.send(decoder.encode(DATA_TYPE.OVERLOAD, true));
         }
-        return ws.send(decoder.encode(DATA_TYPE.OVERLOAD, false));
+        // return ws.send(decoder.encode(DATA_TYPE.OVERLOAD, false));
         // ws.send(decoder.encode(DATA_TYPE.HEART_BEAT));
     }
 
