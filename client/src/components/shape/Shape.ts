@@ -1,11 +1,14 @@
-import {PLAYER_JUMP_INIT_SPEED, PLAYER_SPEED, GRAVITATIONAL_ACCELERATION} from "../../utils/config";
+import {PLAYER_JUMP_INIT_SPEED, PLAYER_SPEED} from "utils/config";
+import {GRAVITATIONAL_ACCELERATION} from "utils/consts";
 
-export default class Shape {
+export default abstract class Shape {
     protected pointers: Array<[number, number]> = [];
     public jumping: boolean = false;
     public vectorY: number = 0;
+    public height: number = 0;
+    public width: number = 0;
 
-    constructor(
+    protected constructor(
         public ctx: CanvasRenderingContext2D,
         public x: number,
         public y: number,
@@ -24,8 +27,25 @@ export default class Shape {
 
     calculateJump(tsSpan: number) {
         const lastVectorY = this.vectorY;
-        this.vectorY = this.vectorY - GRAVITATIONAL_ACCELERATION * tsSpan;
-        this.y += (Math.pow(lastVectorY, 2) - Math.pow(this.vectorY, 2)) / (2 * GRAVITATIONAL_ACCELERATION);
+        const newVectorY = this.vectorY - GRAVITATIONAL_ACCELERATION * tsSpan;
+        const newY =  this.y -((Math.pow(lastVectorY, 2) - Math.pow(this.vectorY, 2)) / (2 * GRAVITATIONAL_ACCELERATION));
+        // TODO check
+        // const pointer = [a, b];
+        // if (isCrash) {
+        //     if (this.vectorY > 0) {
+        //         this.y = b;
+        //     } else {
+        //         this.y = b + this.height;
+        //     }
+        // }
+        this.vectorY = newVectorY;
+        this.y = newY;
+    }
+
+    abstract calculatePointers(): void;
+
+    checkCrash() {
+
     }
 
     draw() {

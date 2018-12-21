@@ -1,5 +1,5 @@
 import Shape from 'components/shape/Shape';
-import {TRIANGLE_SIZE} from 'utils/config';
+import {SQUARE_SIZE, TRIANGLE_SIZE} from 'utils/config';
 import {VALID_USERNAME_LIST} from "../../utils/consts";
 
 export default class Triangle extends Shape {
@@ -12,9 +12,14 @@ export default class Triangle extends Shape {
     ) {
         super(ctx, x, y);
 
+        this.height = TRIANGLE_SIZE / 2;
+        this.width = SQUARE_SIZE;
+    }
+
+    calculatePointers() {
         this.pointers.push([this.x, this.y]);
-        this.pointers.push([this.x + TRIANGLE_SIZE, this.y]);
-        this.pointers.push([this.x, this.y + TRIANGLE_SIZE / 2]);
+        this.pointers.push([this.x + this.width, this.y]);
+        this.pointers.push([this.x, this.y - this.height]);
     }
 
 
