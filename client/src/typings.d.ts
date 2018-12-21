@@ -16,6 +16,9 @@ interface ListenerObject {
 interface AnyObject {
     [key: string]: any
 }
+interface NumberObject {
+    [key: string]: number
+}
 interface SocketMsg {
     [index: number]: number;
 }

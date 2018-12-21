@@ -1,6 +1,7 @@
 import {cloneDeep} from 'lodash';
 import bgData from 'assets/json/background.json';
 import enemy from 'assets/json/enemy.json';
+import {eventKeyType} from 'utils/decorate';
 import {DATA_TYPE, SOCKET_FETCH_TIMEOUT} from 'utils/consts';
 
 const context: { [key: string]: CanvasRenderingContext2D } = {};
@@ -26,6 +27,7 @@ class Store {
     private lastId: number;
     private timestamp: number;
     private timestampSpan: number;
+    public readonly events: Array<eventKeyType> = [];
 
     constructor() {
         this.state = cloneDeep(INIT_STORE_DATA);

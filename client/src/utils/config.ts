@@ -9,3 +9,12 @@ export const SQUARE_SIZE = 50;
 
 export const PLAYER_SPEED = 2;
 export const PLAYER_JUMP_INIT_SPEED = 100; // (1/s)
+
+export enum EVENT_TIMEOUT {
+    shoot = 200,
+    jump = 200,
+    skill = 200,
+    ult = 200,
+    left = 200,
+    right = 200,
+}

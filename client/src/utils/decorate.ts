@@ -1,3 +1,14 @@
+import Controller from 'classes/Controller';
+import {EVENT_TYPE} from 'utils/consts';
+
+export interface controllerInterface {
+    eventPipe: Controller['onEvent'];
+    init: (eventPipe: Controller['onEvent']) => void;
+    destroy: () => void;
+}
+
+export declare type eventKeyType = keyof typeof EVENT_TYPE;
+
 // export interface clearInterface {
 //     clear(): void;
 // }
