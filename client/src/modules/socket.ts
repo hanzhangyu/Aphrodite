@@ -9,6 +9,7 @@ import store from 'modules/store';
 import notify from 'modules/notify';
 import {delay} from 'utils/helper';
 import {DATA_TYPE, SOCKET_HEART_BEAT_TIMEOUT, SOCKET_RECONNECT_TIMEOUT, NOTIFY_TYPE} from 'utils/consts';
+import {eventKeyType} from 'utils/decorate';
 
 const { ssl, server } = process.env;
 let socket: Ws;
@@ -60,7 +61,7 @@ async function open() {
     }
 }
 
-async function send(code: number, msg?: string | boolean | number) {
+async function send(code: number, msg?: string | boolean | number | Array<number | eventKeyType>) {
     if (isReconnecting && store.getState('destroyed')) return;
     await open();
     resetHeartBeat();
@@ -82,6 +83,17 @@ function handleMessage(message: string) {
             alert('Someone closed you connection, please ask the room creator!');
             store.setState(true, 'destroyed');
             destroy();
+            break;
+        case DATA_TYPE.FIND_PARTNER:
+            if (!data.msg) break;
+            store.setState(true, 'game', data.msg, 'exist');
+            break;
+        case DATA_TYPE.EVENT:
+            // store.setState(data.msg[0], 'game', 'distance');
+            // store.setState(data.msg[1], 'game', store.getState('antherPlayerUsername'), 'x');
+            // store.setState(data.msg[2], 'game', store.getState('antherPlayerUsername'), 'y');
+            const [ts, ...events] = data.msg;
+            store.eventsPlayerB.push({ts, events});
             break;
         default:
     }

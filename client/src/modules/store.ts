@@ -18,14 +18,17 @@ const server: {
 const INIT_STORE_DATA = {
     destroyed: false,
     user,
+    antherPlayerUsername: '',
     server,
     game: {
         distance: 0,
         [VALID_USERNAME_LIST[0]]: {
+            exist: false,
             x: 0,
             y: 0,
         },
         [VALID_USERNAME_LIST[1]]: {
+            exist: false,
             x: 0,
             y: 0,
         }
@@ -38,9 +41,10 @@ class Store {
     private listener: ListenerObject;
     private isDestroy: boolean;
     private lastId: number;
-    private timestamp: number;
+    public timestamp: number;
     public timestampSpan: number;
     public readonly events: Array<eventKeyType> = [];
+    public readonly eventsPlayerB: Array<{ts: number, events: Array<eventKeyType>}> = [];
     public controller: Controller;
     public bg: Background;
     public stage: Stage;

@@ -6,6 +6,7 @@ import {DATA_TYPE, NOTIFY_TYPE} from 'utils/consts';
 import socket from 'modules/socket';
 import store from 'modules/store';
 import notify from 'modules/notify';
+import {eventKeyType} from 'utils/decorate';
 
 const serverApi = {
     async init() {
@@ -41,6 +42,13 @@ const serverApi = {
             return false;
         }
         return true;
+    },
+    async postEvent(event: Array<eventKeyType>, ts: number) {
+        try {
+            await socket.send(DATA_TYPE.EVENT, [ts, ...event]);
+        } catch (err) {
+            // TODO re rend and sync the position when the player A does not have the event.
+        }
     }
 };
 export default serverApi;

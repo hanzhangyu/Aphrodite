@@ -3,6 +3,8 @@ export const DATA_TYPE = {
     CHECK_USERNAME: 1,
     OVERLOAD: 2,
     CLOSE: 3,
+    FIND_PARTNER: 4,
+    EVENT: 5,
     BACKGROUND: 122,
     CHARACTER: 222,
 };

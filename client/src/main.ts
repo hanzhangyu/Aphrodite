@@ -38,12 +38,14 @@ serverApi.init().then(async () => {
         username = '321';
     }
     localStorage.setItem('test', username);
+    await serverApi.checkName(username);
     //FIXME remove end
+    store.setState(true, 'game', username, 'exist');
     const overload = await checkOverload();
     if (overload || store.getState('destroyed')) return;
     store.setState(username, 'user', 'name');
     store.controller = new Controller();
-    store.stage.createPlayer(username, 'A');
+    store.stage.createAllPlayer(username);
     window.requestAnimationFrame(game);
 });
 

@@ -3,7 +3,7 @@ import {SQUARE_SIZE, TRIANGLE_SIZE} from 'utils/config';
 import {VALID_USERNAME_LIST} from "../../utils/consts";
 
 export default class Triangle extends Shape {
-    static readonly username: string = VALID_USERNAME_LIST[0];
+    public readonly username: string = VALID_USERNAME_LIST[0];
     constructor(
         public readonly id: number,
         public ctx: CanvasRenderingContext2D,

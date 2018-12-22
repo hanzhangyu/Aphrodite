@@ -10,6 +10,7 @@ import store from "modules/store";
 const fixLimitIntervalSpeed = fixLimitInterval.bind(null, PLAYER_MOVE_INIT_SPEED, -PLAYER_MOVE_INIT_SPEED);
 
 export default abstract class Shape {
+    abstract username: string;
     protected pointers: Array<[number, number]> = [];
     protected totalMoveTs: number = 0; // the left of moving time
     protected movedTs: number = 0;
@@ -19,6 +20,8 @@ export default abstract class Shape {
     protected moveDirection: 1 | -1 = 1;
     public height: number = 0;
     public width: number = 0;
+    public isReady: boolean = false;
+    public isA: boolean = false;
 
     protected constructor(
         public ctx: CanvasRenderingContext2D,
@@ -43,12 +46,16 @@ export default abstract class Shape {
     }
 
     calculatePosition() {
+        // if (!this.isA) {
+        //     const {x, y} = store.getState('game', this.username);
+        //     this.x = x;
+        //     this.y = y;
+        //     this.calculatePointers();
+        //     return;
+        // }
         const tsSpan = store.timestampSpan / 1000;
         if (this.totalMoveTs) {
             this.movedTs += tsSpan;
-        }
-        if (this.speedY !== 0 && this.speedX < 0 ) {
-            debugger;
         }
         const lastSpeedY = this.speedY;
         let newSpeedY = 0;

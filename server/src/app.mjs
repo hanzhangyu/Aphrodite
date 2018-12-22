@@ -53,15 +53,23 @@ class App {
                 // TODO refactor use room id && cookie
                 ws.username = data.msg;
                 let isValid = VALID_USERNAME_LIST.indexOf(ws.username) >= 0;
+                let wsOtherPlayer;
                 if (isValid) {
                     for (let item of this.wss.clients.values()) {
-                        if (item !== ws && item.username === ws.username) {
-                            isValid = false;
-                            break;
+                        if (item !== ws) {
+                            wsOtherPlayer = item;
+                            if (item.username === ws.username) {
+                                isValid = false;
+                                break;
+                            }
                         }
                     }
                 }
                 ws.send(decoder.encode(DATA_TYPE.CHECK_USERNAME, isValid));
+                if (isValid && wsOtherPlayer) {
+                    ws.send(decoder.encode(DATA_TYPE.FIND_PARTNER, wsOtherPlayer.username));
+                    wsOtherPlayer.send(decoder.encode(DATA_TYPE.FIND_PARTNER, ws.username));
+                }
                 break;
             case DATA_TYPE.OVERLOAD:
                 // clear the ws pool
@@ -71,6 +79,19 @@ class App {
                     }
                 }
                 ws.send(decoder.encode(DATA_TYPE.OVERLOAD, false));
+                break;
+            case DATA_TYPE.EVENT:
+                // this.distance = data.msg[0];
+                // ws.x = data.msg[1];
+                // ws.y = data.msg[2];
+                ws.eventsQueue = data.msg;
+                let otherPlayer;
+                for (let item of this.wss.clients.values()) {
+                    if (item !== ws) {
+                        otherPlayer = item;
+                    }
+                }
+                otherPlayer.send(decoder.encode(DATA_TYPE.EVENT, ws.eventsQueue));
                 break;
             default:
         }

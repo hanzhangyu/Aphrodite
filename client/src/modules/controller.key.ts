@@ -35,7 +35,6 @@ const keyController: controllerKeyInterface = {
             case 'k':
             case 'l':
             case ';':
-                console.log(key);
                 this.eventPipe(KET_MAP[key as keyMapType]);
                 break;
         }
