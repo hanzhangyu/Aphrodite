@@ -72,6 +72,7 @@ export default class BaseTree extends Base {
     }
 
     shouldAlive() : boolean {
-        return store.isOutOfScreen([[this.distance, 0]]);
+        // return store.isOutOfScreen([[this.distance, 0]]);
+        return true;
     }
 }

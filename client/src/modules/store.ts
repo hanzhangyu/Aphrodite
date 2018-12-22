@@ -1,8 +1,11 @@
 import {cloneDeep} from 'lodash';
 import bgData from 'assets/json/background.json';
 import enemy from 'assets/json/enemy.json';
+import Controller from 'classes/Controller';
+import Background from 'components/Background';
+import Stage from 'components/Stage';
 import {eventKeyType} from 'utils/decorate';
-import {DATA_TYPE, SOCKET_FETCH_TIMEOUT} from 'utils/consts';
+import {DATA_TYPE, SOCKET_FETCH_TIMEOUT, VALID_USERNAME_LIST} from 'utils/consts';
 
 const context: { [key: string]: CanvasRenderingContext2D } = {};
 const user: {
@@ -16,7 +19,17 @@ const INIT_STORE_DATA = {
     destroyed: false,
     user,
     server,
-    distance: 0,
+    game: {
+        distance: 0,
+        [VALID_USERNAME_LIST[0]]: {
+            x: 0,
+            y: 0,
+        },
+        [VALID_USERNAME_LIST[1]]: {
+            x: 0,
+            y: 0,
+        }
+    },
     context,
 };
 
@@ -26,8 +39,11 @@ class Store {
     private isDestroy: boolean;
     private lastId: number;
     private timestamp: number;
-    private timestampSpan: number;
+    public timestampSpan: number;
     public readonly events: Array<eventKeyType> = [];
+    public controller: Controller;
+    public bg: Background;
+    public stage: Stage;
 
     constructor() {
         this.state = cloneDeep(INIT_STORE_DATA);
@@ -97,13 +113,9 @@ class Store {
         this.isDestroy = true;
         this.state = cloneDeep(INIT_STORE_DATA);
         this.listener = {};
-    }
-
-    isOutOfScreen(pointers: [[number, number]]): boolean {
-        // TODO calculate the current distance span
-        return pointers.every((pointer) => {
-            return true
-        })
+        this.controller = null;
+        this.bg = null;
+        this.stage = null;
     }
 
     resetState() {

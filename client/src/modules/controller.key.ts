@@ -5,9 +5,9 @@
 import {controllerInterface} from 'utils/decorate';
 
 enum KET_MAP {
-    J =  'shoot',
-    K =  'jump',
-    L =  'skill',
+    j =  'shoot',
+    k =  'jump',
+    l =  'skill',
     ';' =  'ult',
     a =  'left',
     d =  'right',
@@ -22,18 +22,21 @@ interface controllerKeyInterface extends controllerInterface {
 const keyController: controllerKeyInterface = {
     eventPipe: null,
     init(controller) {
+        this.handleKeyDown = this.handleKeyDown.bind(this);
         this.eventPipe = controller;
         document.addEventListener('keydown', this.handleKeyDown, false);
     },
     handleKeyDown(e) {
-        switch (e.key) {
+        const key = e.key.toLowerCase();
+        switch (key) {
             case 'a':
             case 'd':
             case 'j':
             case 'k':
             case 'l':
             case ';':
-                this.eventPipe(KET_MAP[e.key as keyMapType]);
+                console.log(key);
+                this.eventPipe(KET_MAP[key as keyMapType]);
                 break;
         }
     },

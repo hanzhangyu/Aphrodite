@@ -1,30 +1,33 @@
 /**
  * @type collect the event and throttle it, then push to the store
  */
+import {cloneDeep} from 'lodash';
 import {EVENT_TIMEOUT} from 'utils/config';
 import {eventKeyType} from 'utils/decorate';
 import store from 'modules/store';
 import controllerKey from 'modules/controller.key';
 import controllerTouch from 'modules/controller.touch';
 
+const isTouch: boolean = ('ontouchend' in document) && false; // FIXME
+const currentController = isTouch ? controllerTouch : controllerKey;
+
+const INIT_TIME = {
+    shoot: 0,
+    jump: 0,
+    skill: 0,
+    ult: 0,
+    left: 0,
+    right: 0,
+};
+
 class Controller {
-    public readonly isTouch: boolean = ('ontouchend' in document);
     private eventLastTime: {
         [key in eventKeyType]: number
     };
 
     constructor() {
-        if (this.isTouch) {
-            controllerKey.init(this.onEvent);
-        }
-        this.eventLastTime = {
-            shoot: 0,
-            jump: 0,
-            skill: 0,
-            ult: 0,
-            left: 0,
-            right: 0,
-        }
+        currentController.init(this.onEvent.bind(this));
+        this.eventLastTime = cloneDeep(INIT_TIME);
     }
 
     onEvent(type: eventKeyType) {
@@ -33,6 +36,11 @@ class Controller {
             store.events.push(type);
             this.eventLastTime[type] = now;
         }
+    }
+
+    destroy() {
+        this.eventLastTime = cloneDeep(INIT_TIME);
+        currentController.destroy();
     }
 
 

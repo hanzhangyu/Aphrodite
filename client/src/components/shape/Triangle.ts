@@ -14,12 +14,13 @@ export default class Triangle extends Shape {
 
         this.height = TRIANGLE_SIZE / 2;
         this.width = SQUARE_SIZE;
+        this.calculatePointers();
     }
 
     calculatePointers() {
-        this.pointers.push([this.x, this.y]);
-        this.pointers.push([this.x + this.width, this.y]);
-        this.pointers.push([this.x, this.y - this.height]);
+        this.pointers[0] = ([this.x, this.y]);
+        this.pointers[1] = ([this.x + this.width, this.y]);
+        this.pointers[2] = ([this.x, this.y - this.height]);
     }
 
 

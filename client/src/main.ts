@@ -5,6 +5,7 @@ import Background from 'components/Background';
 import Stage from 'components/Stage';
 import store from 'modules/store';
 import api from 'modules/serverApi';
+import Controller from 'classes/Controller';
 import {CANVAS_TYPE, DATA_TYPE, GAME_STATUS, NOTIFY_TYPE, VALID_USERNAME_LIST} from 'utils/consts';
 import {askForName, checkOverload} from 'utils/helper';
 import serverApi from "./modules/serverApi";
@@ -26,24 +27,24 @@ function initCanvas(type: CANVAS_TYPE) {
     c.height = window.innerHeight;
 }
 
-const bg = new Background(0, store.getState('context', CANVAS_TYPE.TYPE_BG));
-const stage = new Stage(0, store.getState('context', CANVAS_TYPE.TYPE_STAGE));
+store.bg = new Background(0, store.getState('context', CANVAS_TYPE.TYPE_BG));
+store.stage = new Stage(0, store.getState('context', CANVAS_TYPE.TYPE_STAGE));
 
 serverApi.init().then(async () => {
-    const username = await askForName();
+    // const username = await askForName();
+    const username = '321'; //FIXME
     const overload = await checkOverload();
     if (overload || store.getState('destroyed')) return;
     store.setState(username, 'user', 'name');
-    if (username === VALID_USERNAME_LIST[0]) {
-        stage.createAllPlayer(username);
-    }
+    store.controller = new Controller();
+    store.stage.createAllPlayer(username);
     window.requestAnimationFrame(game);
 });
 
 function game() {
     store.updateTime();
-    bg.draw();
-    stage.draw();
+    store.bg.draw();
+    store.stage.draw();
     switch (store.getState('status')) {
         case GAME_STATUS.WAIT:
             // TODO wait for anther player

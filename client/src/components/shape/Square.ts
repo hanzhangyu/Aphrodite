@@ -14,15 +14,16 @@ export default class Square extends Shape {
 
         this.height = SQUARE_SIZE;
         this.width = SQUARE_SIZE;
+        this.calculatePointers();
     }
 
     calculatePointers() {
-        const endpointX = this.x - this.width;
+        const endpointX = this.x + this.width;
         const endpointY = this.y - this.height;
-        this.pointers.push([this.x, this.y]);
-        this.pointers.push([endpointX, this.y]);
-        this.pointers.push([endpointX, endpointY]);
-        this.pointers.push([this.x, endpointY]);
+        this.pointers[0] = ([this.x, this.y]);
+        this.pointers[1] = ([endpointX, this.y]);
+        this.pointers[2] = ([endpointX, endpointY]);
+        this.pointers[3] = ([this.x, endpointY]);
     }
 
 }
