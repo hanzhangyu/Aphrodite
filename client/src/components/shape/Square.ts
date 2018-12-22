@@ -3,7 +3,7 @@ import {SQUARE_SIZE} from 'utils/config';
 import {VALID_USERNAME_LIST} from 'utils/consts';
 
 export default class Square extends Shape {
-    public readonly name: string = VALID_USERNAME_LIST[1];
+    static readonly username: string = VALID_USERNAME_LIST[1];
     constructor(
         public readonly id: number,
         public ctx: CanvasRenderingContext2D,

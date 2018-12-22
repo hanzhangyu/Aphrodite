@@ -32,12 +32,18 @@ store.stage = new Stage(0, store.getState('context', CANVAS_TYPE.TYPE_STAGE));
 
 serverApi.init().then(async () => {
     // const username = await askForName();
-    const username = '321'; //FIXME
+    //FIXME remove start
+    let username = '123';
+    if (localStorage.getItem('test') === '123') {
+        username = '321';
+    }
+    localStorage.setItem('test', username);
+    //FIXME remove end
     const overload = await checkOverload();
     if (overload || store.getState('destroyed')) return;
     store.setState(username, 'user', 'name');
     store.controller = new Controller();
-    store.stage.createAllPlayer(username);
+    store.stage.createPlayer(username, 'A');
     window.requestAnimationFrame(game);
 });
 

@@ -3,7 +3,7 @@ import {SQUARE_SIZE, TRIANGLE_SIZE} from 'utils/config';
 import {VALID_USERNAME_LIST} from "../../utils/consts";
 
 export default class Triangle extends Shape {
-    public readonly name: string = VALID_USERNAME_LIST[0];
+    static readonly username: string = VALID_USERNAME_LIST[0];
     constructor(
         public readonly id: number,
         public ctx: CanvasRenderingContext2D,
@@ -20,7 +20,7 @@ export default class Triangle extends Shape {
     calculatePointers() {
         this.pointers[0] = ([this.x, this.y]);
         this.pointers[1] = ([this.x + this.width, this.y]);
-        this.pointers[2] = ([this.x, this.y - this.height]);
+        this.pointers[2] = ([this.x + this.width / 2, this.y - this.height]);
     }
 
 
