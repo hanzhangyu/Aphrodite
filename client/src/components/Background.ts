@@ -56,7 +56,7 @@ export default class Background extends Base {
             this.decorators = this.decorators.concat(new Array(newSnowNum).fill(undefined).map(() => new Snow(
                 store.getNewId(),
                 this.ctx,
-                random(this.distance + this.width + 10, this.distance - 10),
+                random(this.distance + this.width * 2, this.distance - 10),
                 -this.height - 10,
                 random(SNOW_MAX_SIZE, SNOW_MIX_SIZE),
                 random(SNOW_MAX_SPEED, SNOW_MIN_SPEED),

@@ -34,7 +34,7 @@ export enum EVENT_TIMEOUT {
 
 export const SNOW_MAX_SPEED = 50;
 export const SNOW_MIN_SPEED = 20;
-export const SNOW_DENSITY = 15; // the snow create in a unity time(1s)
+export const SNOW_DENSITY = 15 * 2; // the snow create in a unity time(1s)
 export const SNOW_MAX_SIZE = 3;
 export const SNOW_MIX_SIZE = 1;
 export const SNOW_MAX_OPACITY = 0.9;
