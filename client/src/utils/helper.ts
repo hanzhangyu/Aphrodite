@@ -56,3 +56,5 @@ export const fixLimitInterval = (max : number, min : number, val : number) => Ma
 
 export const random = (max : number, min : number) => Math.random() * (max - min) + min;
 
+export const randomInt = (max : number, min : number) => Math.ceil(random(max, min - 1));
+

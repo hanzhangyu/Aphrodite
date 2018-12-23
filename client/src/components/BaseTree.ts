@@ -1,3 +1,6 @@
+/**
+ * @file Will come in the caption one, This one has more variant than the fir tree.
+ */
 import Base from 'components/Base';
 import store from 'modules/store';
 import {getRad} from 'utils/helper';

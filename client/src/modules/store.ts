@@ -22,6 +22,7 @@ const INIT_STORE_DATA = {
     server,
     game: {
         distance: 0,
+        cameraIncrementDistance: 0,
         [VALID_USERNAME_LIST[0]]: {
             exist: false,
             x: 0,

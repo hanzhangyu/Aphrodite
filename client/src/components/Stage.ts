@@ -50,7 +50,7 @@ export default class Stage extends Base {
             store.setState(cameraExpected, 'game', 'distance');
         }
         // this.cameraIncrementDistance = cameraIncrementDistance;
-        // store.setState(cameraIncrementDistance, 'game', 'cameraIncrementDistance');
+        store.setState(cameraIncrementDistance, 'game', 'cameraIncrementDistance');
     }
 
     isCameraLocked() {

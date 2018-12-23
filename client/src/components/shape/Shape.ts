@@ -90,7 +90,7 @@ export default abstract class Shape {
     // FIXME
     checkCrash(x: number, y: number, speedX: number, speedY: number) {
         const distance = store.getState('game', 'distance');
-        const newX = fixLimitInterval(distance + window.innerWidth, distance, x);
+        const newX = fixLimitInterval(distance + window.innerWidth - this.width, distance, x);
         const newY = fixLimitInterval(0, -innerHeight, y);
         let newSpeedX = speedX;
         let newSpeedY = speedY;
