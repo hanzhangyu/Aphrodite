@@ -11,7 +11,7 @@ export default class Stage extends Base {
     private playerA: Triangle;
     private playerB: Square;
     private distance: number = 0;
-    private cameraIncrement: number = 0;
+    // private cameraIncrementDistance: number = 0;
 
     constructor(
         public readonly id: number,
@@ -27,7 +27,7 @@ export default class Stage extends Base {
         this.distance = store.getState('game', 'distance');
         this.ctx.translate(-this.distance, this.height);
         this.clear();
-        // this.drawFog();
+        this.drawFog();
         this.playerA.draw();
         if (this.playerB.isReady) {
             this.playerB.draw();
@@ -41,16 +41,16 @@ export default class Stage extends Base {
     checkCamera() {
         if (this.isCameraLocked()) return;
         const currentDistance = store.getState('game', 'distance');
-        const maxCameraDistance = this.width / 2 + store.getState('game', 'distance');
-        const cameraIncrement = Math.max(0, this.playerA.x - maxCameraDistance, this.playerB.x - maxCameraDistance);
-        let cameraExpected = currentDistance + cameraIncrement;
-        console.log('cameraExpected', cameraExpected);
-        cameraExpected += Math.min(0, this.playerA.x - cameraExpected, this.playerB.x - cameraExpected);
-        console.log('cameraExpectedddd', cameraExpected);
-        if (cameraIncrement > 0) { // FIXME can not go back
+        const maxCameraDistance = this.width / 2 + store.getState('game', 'distance'); // move camera when player movement beyond the half of camera
+        let cameraIncrementDistance = Math.max(0, this.playerA.x - maxCameraDistance, this.playerB.x - maxCameraDistance); // get the maximum of movement
+        let cameraExpected = currentDistance + cameraIncrementDistance;
+        cameraExpected += Math.min(0, this.playerA.x - cameraExpected, this.playerB.x - cameraExpected); // lock camera when the other player is in the left
+        cameraIncrementDistance = Math.max(0, cameraExpected - currentDistance); // FIXME lock go back
+        if (cameraIncrementDistance > 0) { // FIXME can not go back
             store.setState(cameraExpected, 'game', 'distance');
         }
-        this.cameraIncrement = cameraIncrement;
+        // this.cameraIncrementDistance = cameraIncrementDistance;
+        // store.setState(cameraIncrementDistance, 'game', 'cameraIncrementDistance');
     }
 
     isCameraLocked() {
@@ -133,8 +133,7 @@ export default class Stage extends Base {
     }
 
     clear() {
-        console.log(this.distance);
-        this.ctx.clearRect(-this.cameraIncrement, -this.height, this.width, this.height);
+        this.ctx.clearRect(this.distance, -this.height, this.width, this.height);
     };
 
     destroy() {
