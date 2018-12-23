@@ -91,7 +91,7 @@ class App {
                         otherPlayer = item;
                     }
                 }
-                otherPlayer.send(decoder.encode(DATA_TYPE.EVENT, ws.eventsQueue));
+                otherPlayer && otherPlayer.send(decoder.encode(DATA_TYPE.EVENT, ws.eventsQueue));
                 break;
             default:
         }
