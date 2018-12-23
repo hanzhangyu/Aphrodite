@@ -25,11 +25,13 @@ const INIT_STORE_DATA = {
         cameraIncrementDistance: 0,
         [VALID_USERNAME_LIST[0]]: {
             exist: false,
+            talk: '',
             x: 0,
             y: 0,
         },
         [VALID_USERNAME_LIST[1]]: {
             exist: false,
+            talk: '',
             x: 0,
             y: 0,
         }
@@ -92,7 +94,6 @@ class Store {
         }
 
         if (keyName === 'timestamp') return;
-        console.log('[STATE SET]', keyName, value);
     }
 
     listen(key: string) {

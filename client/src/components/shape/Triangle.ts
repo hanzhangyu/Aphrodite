@@ -4,6 +4,7 @@ import {VALID_USERNAME_LIST} from "../../utils/consts";
 
 export default class Triangle extends Shape {
     public readonly username: string = VALID_USERNAME_LIST[0];
+    public readonly color: string = '#3daaff';
     constructor(
         public readonly id: number,
         public ctx: CanvasRenderingContext2D,

@@ -11,6 +11,7 @@ const fixLimitIntervalSpeed = fixLimitInterval.bind(null, PLAYER_MOVE_INIT_SPEED
 
 export default abstract class Shape {
     abstract username: string;
+    abstract readonly color: string;
     protected pointers: Array<[number, number]> = [];
     protected totalMoveTs: number = 0; // the left of moving time
     protected movedTs: number = 0;
@@ -105,7 +106,13 @@ export default abstract class Shape {
     draw() {
         this.calculatePosition();
         this.ctx.save();
-        this.ctx.fillStyle = '#fff';
+        const {talk} = store.getState('game', this.username);
+        this.ctx.fillStyle = this.color;
+        if (talk) {
+            this.ctx.font='15px Microsoft YaHei';
+            this.ctx.textAlign='center';
+            this.ctx.fillText(talk,this.x + this.width / 2,this.y - 40);
+        }
         this.ctx.beginPath();
         this.ctx.moveTo(...this.pointers[0]);
         for (let i = 1; i < this.pointers.length; i++) {
