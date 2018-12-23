@@ -94,7 +94,10 @@ export default abstract class Shape {
         const newY = fixLimitInterval(0, -innerHeight, y);
         let newSpeedX = speedX;
         let newSpeedY = speedY;
-        newX !== x && (newSpeedX = 0);
+        if (newX !== x) {
+            newSpeedX = 0;
+            this.totalMoveTs = 0;
+        }
         newY !== y && (newSpeedY = 0);
         return [newX, newY, newSpeedX, newSpeedY]
     }

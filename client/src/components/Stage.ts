@@ -10,6 +10,8 @@ import serverApi from "../modules/serverApi";
 export default class Stage extends Base {
     private playerA: Triangle;
     private playerB: Square;
+    private distance: number = 0;
+    private cameraIncrement: number = 0;
 
     constructor(
         public readonly id: number,
@@ -19,11 +21,13 @@ export default class Stage extends Base {
     }
 
     draw() {
+        this.checkCamera();
         this.checkEvent();
         this.ctx.save();
-        this.ctx.translate(0, this.height);
+        this.distance = store.getState('game', 'distance');
+        this.ctx.translate(-this.distance, this.height);
         this.clear();
-        this.drawFog();
+        // this.drawFog();
         this.playerA.draw();
         if (this.playerB.isReady) {
             this.playerB.draw();
@@ -32,6 +36,25 @@ export default class Stage extends Base {
         }
         // TODO clear the old tree and create the new tree
         this.ctx.restore();
+    }
+
+    checkCamera() {
+        if (this.isCameraLocked()) return;
+        const currentDistance = store.getState('game', 'distance');
+        const maxCameraDistance = this.width / 2 + store.getState('game', 'distance');
+        const cameraIncrement = Math.max(0, this.playerA.x - maxCameraDistance, this.playerB.x - maxCameraDistance);
+        let cameraExpected = currentDistance + cameraIncrement;
+        console.log('cameraExpected', cameraExpected);
+        cameraExpected += Math.min(0, this.playerA.x - cameraExpected, this.playerB.x - cameraExpected);
+        console.log('cameraExpectedddd', cameraExpected);
+        if (cameraIncrement > 0) { // FIXME can not go back
+            store.setState(cameraExpected, 'game', 'distance');
+        }
+        this.cameraIncrement = cameraIncrement;
+    }
+
+    isCameraLocked() {
+        return !this.playerB.isReady;
     }
 
     checkEvent() {
@@ -78,11 +101,11 @@ export default class Stage extends Base {
 
     drawFog() {
         this.ctx.save();
-        const gradient = this.ctx.createLinearGradient(0, -this.height, 0, this.height);
+        const gradient = this.ctx.createLinearGradient(this.distance, -this.height, this.distance, this.height);
         gradient.addColorStop(0, "rgba(255,255,255,0.3)");
         gradient.addColorStop(1, "rgba(255,255,255,0)");
         this.ctx.fillStyle = gradient;
-        this.ctx.fillRect(0, -this.height, this.width, this.height);
+        this.ctx.fillRect(this.distance, -this.height, this.width, this.height);
         this.ctx.restore();
     }
 
@@ -110,7 +133,8 @@ export default class Stage extends Base {
     }
 
     clear() {
-        this.ctx.clearRect(0, -this.height, this.width, this.height);
+        console.log(this.distance);
+        this.ctx.clearRect(-this.cameraIncrement, -this.height, this.width, this.height);
     };
 
     destroy() {
