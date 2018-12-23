@@ -12,7 +12,7 @@ export default class BaseTree extends Base {
     constructor(
         id: number,
         public ctx: CanvasRenderingContext2D,
-        public readonly distance: number,
+        public readonly x: number,
     ) {
         super(id);
 
@@ -20,7 +20,7 @@ export default class BaseTree extends Base {
 
     draw() {
         this.ctx.save();
-        this.ctx.translate(this.distance, this.height);
+        this.ctx.translate(this.x, this.height);
         this.ctx.lineWidth = 1 + (Math.random() * TREE_MAX_BRANCH_DISTANCE);
         this.ctx.lineJoin = 'round';
 
@@ -71,8 +71,7 @@ export default class BaseTree extends Base {
         }
     }
 
-    shouldAlive() : boolean {
-        // return store.isOutOfScreen([[this.distance, 0]]);
-        return true;
+    shouldAlive(distance: number) : boolean {
+        return this.x >= distance + 300;
     }
 }

@@ -54,3 +54,5 @@ export async function checkOverload() {
 
 export const fixLimitInterval = (max : number, min : number, val : number) => Math.min(max, Math.max(min, val));
 
+export const random = (max : number, min : number) => Math.random() * (max - min) + min;
+

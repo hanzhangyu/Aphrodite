@@ -19,7 +19,7 @@ export default abstract class Base {
         this.isDestroy = true;
     };
 
-    shouldAlive() {
+    shouldAlive(distance: number) : boolean {
         return true;
     }
 }
