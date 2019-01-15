@@ -6,6 +6,11 @@ import Background from 'components/Background';
 import Stage from 'components/Stage';
 import {eventKeyType} from 'utils/decorate';
 import {DATA_TYPE, SOCKET_FETCH_TIMEOUT, VALID_USERNAME_LIST} from 'utils/consts';
+import {delay} from 'utils/helper';
+import bgMusic from 'assets/medias/bgm.mp3';
+
+const mediaEle = new Audio(bgMusic);
+mediaEle.loop = true;
 
 const context: { [key: string]: CanvasRenderingContext2D } = {};
 const user: {
@@ -48,6 +53,7 @@ class Store {
     public timestampSpan: number;
     public totalDistance: number = 1500; // FIXME
     public readonly events: Array<eventKeyType> = [];
+    public readonly bgm: HTMLAudioElement = mediaEle;
     public readonly eventsPlayerB: Array<{ts: number, events: Array<eventKeyType>}> = [];
     public controller: Controller;
     public bg: Background;
@@ -60,6 +66,14 @@ class Store {
         this.lastId = 0;
         this.timestamp = 0;
         this.timestampSpan = 0;
+        // this.bgm.load();
+    }
+
+    async playBgm() {
+        return Promise.race([
+            delay(3000),
+            this.bgm.play(),
+        ]);
     }
 
     updateTime() {

@@ -3,6 +3,8 @@ declare module "*.json" {
     export default value;
 }
 
+declare module '*.mp3';
+
 interface NavigatorCordova extends Navigator {
     app: {
         exitApp: () => any; // Or whatever is the type of the exitApp function
