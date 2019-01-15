@@ -1,6 +1,8 @@
 # Aphrodite
 
-The Christmas is coming soon. Can I make it down in this two weekend?
+~~The Christmas is coming soon. Can I make it down in this two weekend?~~
+
+o(╥﹏╥)o, My monitor was broken.
 
 Sweet game make by cordova.
 

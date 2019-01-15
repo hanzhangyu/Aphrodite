@@ -2,6 +2,7 @@ import Base from 'components/Base';
 import BaseTree from 'components/BaseTree';
 import FirTree from 'components/FirTree';
 import Snow from 'components/Snow';
+import House from 'components/House';
 import store from 'modules/store';
 import {DATA_TYPE} from 'utils/consts';
 import {random, randomInt} from 'utils/helper';
@@ -34,17 +35,24 @@ interface Actor {
 
 export default class Background extends Base {
     private decorators: Array<BaseTree | Snow | FirTree> = [];
+    private house: House;
     private isReady: boolean;
     private distance: number = 0;
     private snowDensityAccumulation: number = 0;
     private treeDensityAccumulation: number = 0;
     private treeDensityInterval: number = random(3, 0.7);
+    private treeMaxFarDistance: number; // FIXME
+    private houseAppearDistance: number; // FIXME
 
     constructor(
         id: number,
         public ctx: CanvasRenderingContext2D,
     ) {
         super(id);
+        this.treeMaxFarDistance = store.totalDistance - 200;
+
+        this.houseAppearDistance = store.totalDistance - 250;
+        this.house = new House(store.getNewId(), ctx, store.totalDistance + 250);
     }
 
     calculateSnow() {
@@ -68,7 +76,6 @@ export default class Background extends Base {
     calculateTree() {
         if (this.distance === 0) return;
         const movementSpan = store.getState('game', 'cameraIncrementDistance');
-        console.log((FIR_TREE_DENSITY * movementSpan / FIR_TREE_DENSITY_UNIT) * this.treeDensityInterval);
         this.treeDensityAccumulation += (FIR_TREE_DENSITY * movementSpan / FIR_TREE_DENSITY_UNIT) * this.treeDensityInterval;
         if (this.treeDensityAccumulation >= 1) {
             const newTreeNum = Math.floor(this.treeDensityAccumulation);
@@ -92,6 +99,7 @@ export default class Background extends Base {
     }
 
     draw() {
+        this.distance = store.getState('game', 'distance');
         if (!this.isReady) {
             this.isReady = store.getState('game', store.getState('antherPlayerUsername'), 'exist');
             if (!this.isReady) {
@@ -99,12 +107,16 @@ export default class Background extends Base {
             }
         }
         this.ctx.save();
-        this.distance = store.getState('game', 'distance');
         this.ctx.translate(-this.distance, this.height);
         this.clear();
         this.decorators = this.decorators.filter(decorator => decorator.shouldAlive(this.distance));
         this.calculateSnow();
-        this.calculateTree();
+        if (this.distance < this.treeMaxFarDistance) {
+            this.calculateTree();
+        }
+        if (this.distance > this.houseAppearDistance) {
+            this.house.draw();
+        }
         // @ts-ignore
         if (!window.ddd) {
             // @ts-ignore

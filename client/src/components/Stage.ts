@@ -39,8 +39,8 @@ export default class Stage extends Base {
     }
 
     checkCamera() {
-        if (this.isCameraLocked()) return;
         const currentDistance = store.getState('game', 'distance');
+        if (this.isCameraLocked(currentDistance)) return;
         const maxCameraDistance = this.width / 2 + store.getState('game', 'distance'); // move camera when player movement beyond the half of camera
         let cameraIncrementDistance = Math.max(0, this.playerA.x - maxCameraDistance, this.playerB.x - maxCameraDistance); // get the maximum of movement
         let cameraExpected = currentDistance + cameraIncrementDistance;
@@ -53,8 +53,8 @@ export default class Stage extends Base {
         store.setState(cameraIncrementDistance, 'game', 'cameraIncrementDistance');
     }
 
-    isCameraLocked() {
-        return !this.playerB.isReady;
+    isCameraLocked(distance: number) {
+        return !this.playerB.isReady || distance >= store.totalDistance;
     }
 
     checkEvent() {

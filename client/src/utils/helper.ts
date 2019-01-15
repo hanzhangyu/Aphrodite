@@ -54,6 +54,39 @@ export async function checkOverload() {
 
 export const fixLimitInterval = (max : number, min : number, val : number) => Math.min(max, Math.max(min, val));
 
+export const fixLimitIntervalLoop = (max : number, min : number, val : number) => {
+    const length = max - min;
+    const overflowRight = val - max;
+    const overflowLeft = min - val;
+    if (overflowRight > 0) {
+        return val - Math.ceil(overflowRight / length) * length;
+    }
+    if (overflowLeft > 0) {
+        return val + Math.ceil(overflowLeft / length) * length;
+    }
+    return val;
+};
+
+export const fixLimitIntervalReverseLoop = (max : number, min : number, val : number) => {
+    const length = max - min;
+    const overflowRight = val - max;
+    const overflowLeft = min - val;
+    let time = 0;
+    let newVal = val;
+    if (overflowRight > 0) {
+        time = Math.ceil(overflowRight / length);
+        newVal = val - Math.ceil(overflowRight / length) * length;
+    }
+    if (overflowLeft > 0) {
+        time = Math.ceil(overflowLeft / length);
+        newVal = val + Math.ceil(overflowLeft / length) * length;
+    }
+    if (time % 2 === 0) {
+        return newVal;
+    }
+    return max + min - newVal;
+};
+
 export const random = (max : number, min : number) => Math.random() * (max - min) + min;
 
 export const randomInt = (max : number, min : number) => Math.ceil(random(max, min - 1));
