@@ -33,7 +33,6 @@ export default class House extends Base {
 
     draw() {
         const HOUSE_X = this.distance;
-        console.log(HOUSE_X);
         this.opacity += 0.002;
 
         this.ctx.save();

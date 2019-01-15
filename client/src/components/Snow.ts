@@ -34,7 +34,7 @@ export default class Snow extends Base {
         this.y += this.speed * time;
     }
 
-    shouldAlive(distance: number) : boolean {
-        return this.x >= distance - 10;
+    shouldAlive(distance?: number) : boolean {
+        return this.y <= 10;
     }
 }
