@@ -4,7 +4,7 @@ import FirTree from 'components/FirTree';
 import Snow from 'components/Snow';
 import House from 'components/House';
 import store from 'modules/store';
-import {DATA_TYPE} from 'utils/consts';
+import {VALID_USERNAME_LIST} from 'utils/consts';
 import {random, randomInt} from 'utils/helper';
 import {
     SNOW_MAX_SPEED,
@@ -49,10 +49,10 @@ export default class Background extends Base {
         public ctx: CanvasRenderingContext2D,
     ) {
         super(id);
-        this.treeMaxFarDistance = store.totalDistance - 200;
+        this.treeMaxFarDistance = store.totalDistance - 300;
 
-        this.houseAppearDistance = store.totalDistance - 250;
-        this.house = new House(store.getNewId(), ctx, store.totalDistance + 250);
+        this.houseAppearDistance = store.totalDistance - this.width;
+        this.house = new House(store.getNewId(), ctx, store.totalDistance + 350);
     }
 
     calculateSnow() {
@@ -104,6 +104,8 @@ export default class Background extends Base {
             this.isReady = store.getState('game', store.getState('antherPlayerUsername'), 'exist');
             if (!this.isReady) {
                 return;
+            } else {
+                store.getState('antherPlayerUsername') === VALID_USERNAME_LIST[0] && store.playBgm(); // FIXME remove condition
             }
         }
         this.ctx.save();
