@@ -91,3 +91,5 @@ export const random = (max : number, min : number) => Math.random() * (max - min
 
 export const randomInt = (max : number, min : number) => Math.ceil(random(max, min - 1));
 
+export const average = (...array : number[]) : number => array.reduce((s, cur) => s + cur, 0) / array.length;
+
