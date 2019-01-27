@@ -4,7 +4,8 @@ import {fixLimitIntervalReverseLoop} from 'utils/helper';
 
 const fixLimitIntervalReverseLoopOpacity = fixLimitIntervalReverseLoop.bind(null, 0.9, 0.3);
 
-// const HOUSE_X = 200;
+// const this.HOUSE_X = 200;
+const SCALE = 0.7;
 const HOUSE_WIDTH = 250;
 const HOUSE_HEIGHT_BASE = 130;
 const HOUSE_HEIGHT_RIDGE = 90;
@@ -21,6 +22,9 @@ const windowOffsetRelativeToGround = 30;
 // TODO cache the constants image data
 
 export default class House extends Base {
+    private HOUSE_X: number = 0;
+    private doorXRight: number = 0;
+
     constructor(
         id: number,
         public ctx: CanvasRenderingContext2D,
@@ -28,62 +32,24 @@ export default class House extends Base {
         public opacity: number = 0,
     ) {
         super(id);
-
     }
 
     draw() {
-        const HOUSE_X = this.distance;
         this.opacity += 0.002;
 
         this.ctx.save();
-        const k = HOUSE_HEIGHT_BASE / (HOUSE_WIDTH / 2);
-        const houseCenter = HOUSE_X + HOUSE_WIDTH / 2;
+        this.ctx.scale(SCALE, SCALE);
+        this.HOUSE_X = this.distance / SCALE;
 
-        // house base
-        this.ctx.fillStyle = '#271B0F';
-        this.ctx.beginPath();
-        this.ctx.moveTo(HOUSE_X, 0);
-        this.ctx.lineTo(HOUSE_X + HOUSE_WIDTH, 0);
-        this.ctx.lineTo(HOUSE_X + HOUSE_WIDTH, -HOUSE_HEIGHT_BASE);
-        this.ctx.lineTo(houseCenter, -HOUSE_HEIGHT_RIDGE - HOUSE_HEIGHT_BASE);
-        this.ctx.lineTo(HOUSE_X, -HOUSE_HEIGHT_BASE);
-        this.ctx.lineTo(HOUSE_X, 0);
-        this.ctx.fill();
+        this.drawStatic();
+        this.drawWindow();
+        this.ctx.restore();
+    }
 
-        // ridge line
-        this.ctx.strokeStyle = '#3A3D28';
-        this.ctx.lineWidth = 5;
-        this.ctx.beginPath();
-        this.ctx.moveTo(HOUSE_X, -HOUSE_HEIGHT_BASE);
-        this.ctx.lineTo(HOUSE_X + HOUSE_WIDTH, -HOUSE_HEIGHT_BASE);
-        this.ctx.stroke();
-
-        // ridge circle
-        this.ctx.lineWidth = 3;
-        this.ctx.beginPath();
-        let circleCenterX = HOUSE_X + HOUSE_WIDTH / 2;
-        let circleCenterY = -HOUSE_HEIGHT_BASE - HOUSE_HEIGHT_RIDGE / 2 + 5;
-        this.ctx.arc(circleCenterX, circleCenterY, circleRadius, 0, 2 * Math.PI);
-        this.ctx.lineTo(circleCenterX - circleRadius, circleCenterY);
-        this.ctx.moveTo(circleCenterX, circleCenterY - circleRadius);
-        this.ctx.lineTo(circleCenterX, circleCenterY + circleRadius);
-        this.ctx.stroke();
-
-        // door
-        const doorWidthHalf = doorWidth / 2;
-        let doorXLeft = circleCenterX - doorWidthHalf;
-        let doorXRight = circleCenterX + doorWidthHalf;
-        this.ctx.beginPath();
-        this.ctx.lineWidth = 5;
-        this.ctx.strokeStyle = '#181815';
-        this.ctx.moveTo(doorXLeft, 0);
-        this.ctx.lineTo(doorXLeft, -doorHeight);
-        this.ctx.lineTo(doorXRight, -doorHeight);
-        this.ctx.lineTo(doorXRight, 0);
-        this.ctx.stroke();
-
-
+    drawWindow() {
         // window
+        const doorXLeft = this.HOUSE_X + HOUSE_WIDTH / 2 - doorWidth / 2;
+        const doorXRight = this.HOUSE_X + HOUSE_WIDTH / 2 + doorWidth / 2;
         let windowYBottom = -windowOffsetRelativeToGround;
         let windowYTop = -windowOffsetRelativeToGround - windowHeight;
         let windowLeftXLeft = doorXLeft - windowOffsetRelativeToDoor - windowWidth;
@@ -116,10 +82,58 @@ export default class House extends Base {
         this.ctx.moveTo(lineRightX, windowYBottom);
         this.ctx.lineTo(lineRightX, windowYTop);
         this.ctx.stroke();
+    }
+
+    // TODO cache this
+    drawStatic() {
+        const k = HOUSE_HEIGHT_BASE / (HOUSE_WIDTH / 2);
+        const houseCenter = this.HOUSE_X + HOUSE_WIDTH / 2;
+
+        // house base
+        this.ctx.fillStyle = '#271B0F';
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.HOUSE_X, 0);
+        this.ctx.lineTo(this.HOUSE_X + HOUSE_WIDTH, 0);
+        this.ctx.lineTo(this.HOUSE_X + HOUSE_WIDTH, -HOUSE_HEIGHT_BASE);
+        this.ctx.lineTo(houseCenter, -HOUSE_HEIGHT_RIDGE - HOUSE_HEIGHT_BASE);
+        this.ctx.lineTo(this.HOUSE_X, -HOUSE_HEIGHT_BASE);
+        this.ctx.lineTo(this.HOUSE_X, 0);
+        this.ctx.fill();
+
+        // ridge line
+        this.ctx.strokeStyle = '#3A3D28';
+        this.ctx.lineWidth = 5;
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.HOUSE_X, -HOUSE_HEIGHT_BASE);
+        this.ctx.lineTo(this.HOUSE_X + HOUSE_WIDTH, -HOUSE_HEIGHT_BASE);
+        this.ctx.stroke();
+
+        // ridge circle
+        this.ctx.lineWidth = 3;
+        this.ctx.beginPath();
+        let circleCenterX = this.HOUSE_X + HOUSE_WIDTH / 2;
+        let circleCenterY = -HOUSE_HEIGHT_BASE - HOUSE_HEIGHT_RIDGE / 2 + 5;
+        this.ctx.arc(circleCenterX, circleCenterY, circleRadius, 0, 2 * Math.PI);
+        this.ctx.lineTo(circleCenterX - circleRadius, circleCenterY);
+        this.ctx.moveTo(circleCenterX, circleCenterY - circleRadius);
+        this.ctx.lineTo(circleCenterX, circleCenterY + circleRadius);
+        this.ctx.stroke();
+
+        // door
+        const doorWidthHalf = doorWidth / 2;
+        const doorXLeft = circleCenterX - doorWidthHalf;
+        const doorXRight = circleCenterX + doorWidthHalf;
+        this.ctx.beginPath();
+        this.ctx.lineWidth = 5;
+        this.ctx.strokeStyle = '#181815';
+        this.ctx.moveTo(doorXLeft, 0);
+        this.ctx.lineTo(doorXLeft, -doorHeight);
+        this.ctx.lineTo(doorXRight, -doorHeight);
+        this.ctx.lineTo(doorXRight, 0);
+        this.ctx.stroke();
 
         // chimney
         // this.ctx.
-
 
         // ridge
         this.ctx.lineJoin = 'miter';
@@ -127,9 +141,9 @@ export default class House extends Base {
         this.ctx.strokeStyle = '#576b3c';
         this.ctx.lineWidth = HOUSE_RIDGE_WIDTH;
         this.ctx.beginPath();
-        this.ctx.moveTo(HOUSE_X - 10, -HOUSE_HEIGHT_BASE + 10 * k - HOUSE_RIDGE_WIDTH);
+        this.ctx.moveTo(this.HOUSE_X - 10, -HOUSE_HEIGHT_BASE + 10 * k - HOUSE_RIDGE_WIDTH);
         this.ctx.lineTo(houseCenter, -HOUSE_HEIGHT_RIDGE - HOUSE_HEIGHT_BASE - HOUSE_RIDGE_WIDTH);
-        this.ctx.lineTo(HOUSE_X + HOUSE_WIDTH + 10, -HOUSE_HEIGHT_BASE + 10 * k - HOUSE_RIDGE_WIDTH);
+        this.ctx.lineTo(this.HOUSE_X + HOUSE_WIDTH + 10, -HOUSE_HEIGHT_BASE + 10 * k - HOUSE_RIDGE_WIDTH);
 
         // snow at ridge
         const snowHeight = HOUSE_RIDGE_WIDTH + HOUSE_RIDGE_SNOW_WIDTH + 2;
@@ -139,11 +153,10 @@ export default class House extends Base {
         this.ctx.lineCap = 'round';
         this.ctx.lineWidth = HOUSE_RIDGE_SNOW_WIDTH;
         this.ctx.beginPath();
-        this.ctx.moveTo(HOUSE_X - 11, -HOUSE_HEIGHT_BASE + 11 * k - snowHeight);
+        this.ctx.moveTo(this.HOUSE_X - 11, -HOUSE_HEIGHT_BASE + 11 * k - snowHeight);
         this.ctx.lineTo(houseCenter, -HOUSE_HEIGHT_RIDGE - HOUSE_HEIGHT_BASE - snowHeight);
-        this.ctx.lineTo(HOUSE_X + HOUSE_WIDTH + 11, -HOUSE_HEIGHT_BASE + 11 * k - snowHeight);
+        this.ctx.lineTo(this.HOUSE_X + HOUSE_WIDTH + 11, -HOUSE_HEIGHT_BASE + 11 * k - snowHeight);
         this.ctx.stroke();
-        this.ctx.restore();
     }
 
     drawBranch(depth: number) {
