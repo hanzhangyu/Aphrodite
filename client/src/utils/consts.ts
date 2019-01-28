@@ -37,6 +37,7 @@ export enum NOTIFY_TYPE {
     ERROR = 'error',
     SUCCESS = 'success',
 }
+
 export const VALID_USERNAME_LIST = process.env.username.split('|');
 
 export enum EVENT_TYPE {
@@ -58,3 +59,6 @@ export const LYRICS = lyric.split('\n').map(str => {
         lyc: strs[2],
     }
 });
+
+export const LETTER = process.env.letter;
+console.log(LETTER);
