@@ -3,6 +3,7 @@ import BaseTree from 'components/BaseTree';
 import FirTree from 'components/FirTree';
 import Snow from 'components/Snow';
 import House from 'components/House';
+import Dragon from 'components/shape/Dragon';
 import store from 'modules/store';
 import {VALID_USERNAME_LIST} from 'utils/consts';
 import {random, randomInt, delay} from 'utils/helper';
@@ -36,6 +37,7 @@ interface Actor {
 export default class Background extends Base {
     private decorators: Array<BaseTree | Snow | FirTree> = [];
     private house: House;
+    private dragon: Dragon;
     private isReady: boolean;
     private distance: number = 0;
     private snowDensityAccumulation: number = 0;
@@ -54,6 +56,7 @@ export default class Background extends Base {
 
         this.houseAppearDistance = store.totalDistance - this.width;
         this.house = new House(store.getNewId(), ctx, store.totalDistance + 350);
+        this.dragon = new Dragon(ctx, 0, -220);
     }
 
     calculateSnow() {
@@ -112,6 +115,7 @@ export default class Background extends Base {
         this.ctx.save();
         this.ctx.translate(-this.distance, this.height);
         this.clear();
+        this.dragon.draw();
         this.decorators = this.decorators.filter(decorator => decorator.shouldAlive(this.distance));
         this.calculateSnow();
         if (this.distance < this.treeMaxFarDistance) {
@@ -139,7 +143,19 @@ export default class Background extends Base {
         this.introDistanceEnd = true;
         await delay(3000);
         this.house.riskGem();
+        this.dragon.start();
+        await delay(2000);
+        this.house.hiddenGem();
+        store.setState('Our gemstone was stolen by this dragon', 'game', VALID_USERNAME_LIST[0], 'talk');
+        await delay(2000);
+        store.setState('Go after it! it is running away', 'game', VALID_USERNAME_LIST[0], 'talk');
         await delay(1000);
+        store.setState('Ok, let`s go', 'game', VALID_USERNAME_LIST[1], 'talk');
+        await delay(1000);
+        store.setState('', 'game', VALID_USERNAME_LIST[0], 'talk');
+        await delay(1000);
+        store.setState('', 'game', VALID_USERNAME_LIST[1], 'talk');
+        store.lockControl();
     }
 
     isCrash(component: Base): boolean {

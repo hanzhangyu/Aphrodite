@@ -181,6 +181,10 @@ export default class House extends Base {
         this.gemStoneRising = true;
     }
 
+    hiddenGem() {
+        this.gemStoneRising = false;
+    }
+
     shouldAlive(): boolean {
         return true;
     }
