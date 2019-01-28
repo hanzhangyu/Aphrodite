@@ -18,12 +18,15 @@ const windowWidth = 60;
 const windowHeight = 70;
 const windowOffsetRelativeToDoor = 20;
 const windowOffsetRelativeToGround = 30;
+const initGemHeight = -HOUSE_HEIGHT_BASE - HOUSE_HEIGHT_RIDGE - 60;
 
 // TODO cache the constants image data
 
 export default class House extends Base {
     private HOUSE_X: number = 0;
     private doorXRight: number = 0;
+    private gemStoneRising: boolean = false;
+    private gemStoneHeight: number = initGemHeight;
 
     constructor(
         id: number,
@@ -43,6 +46,7 @@ export default class House extends Base {
 
         this.drawStatic();
         this.drawWindow();
+        this.gemStoneRising && this.drawGem();
         this.ctx.restore();
     }
 
@@ -159,7 +163,22 @@ export default class House extends Base {
         this.ctx.stroke();
     }
 
-    drawBranch(depth: number) {
+    drawGem() {
+        if (this.gemStoneHeight >= initGemHeight - 40) {
+            this.gemStoneHeight--;
+        }
+        const centerX = this.HOUSE_X + HOUSE_WIDTH / 2;
+        this.ctx.beginPath();
+        this.ctx.fillStyle = 'white';
+        this.ctx.fillRect(centerX - 70, this.gemStoneHeight - 20, 140, 30);
+        this.ctx.fillStyle = 'black';
+        this.ctx.font='15px Microsoft YaHei';
+        this.ctx.textAlign='center';
+        this.ctx.fillText('I`m the gemstone', centerX, this.gemStoneHeight);
+    }
+
+    riskGem() {
+        this.gemStoneRising = true;
     }
 
     shouldAlive(): boolean {

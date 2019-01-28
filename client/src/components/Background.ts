@@ -5,7 +5,7 @@ import Snow from 'components/Snow';
 import House from 'components/House';
 import store from 'modules/store';
 import {VALID_USERNAME_LIST} from 'utils/consts';
-import {random, randomInt} from 'utils/helper';
+import {random, randomInt, delay} from 'utils/helper';
 import {
     SNOW_MAX_SPEED,
     SNOW_MIN_SPEED,
@@ -43,6 +43,7 @@ export default class Background extends Base {
     private treeDensityInterval: number = random(3, 0.7);
     private treeMaxFarDistance: number; // FIXME
     private houseAppearDistance: number; // FIXME
+    private introDistanceEnd: boolean = false;
 
     constructor(
         id: number,
@@ -119,6 +120,9 @@ export default class Background extends Base {
         if (this.distance > this.houseAppearDistance) {
             this.house.draw();
         }
+        if (this.distance >= store.totalDistance) {
+            this.introDistanceEnd || this.riskGem();
+        }
         // @ts-ignore
         if (!window.ddd) {
             // @ts-ignore
@@ -130,8 +134,12 @@ export default class Background extends Base {
         this.ctx.restore();
     }
 
-    drawLine() {
-
+    // fixme risk gem should control by store not the background and the house
+    async riskGem() {
+        this.introDistanceEnd = true;
+        await delay(3000);
+        this.house.riskGem();
+        await delay(1000);
     }
 
     isCrash(component: Base): boolean {

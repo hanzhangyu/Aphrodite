@@ -51,7 +51,7 @@ class Store {
     private lastId: number;
     public timestamp: number;
     public timestampSpan: number;
-    public totalDistance: number = 1500; // FIXME
+    public totalDistance: number = 0; // FIXME
     public readonly events: Array<eventKeyType> = [];
     public readonly bgm: HTMLAudioElement = mediaEle;
     public readonly eventsPlayerB: Array<{ts: number, events: Array<eventKeyType>}> = [];
