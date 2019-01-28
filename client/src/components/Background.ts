@@ -49,7 +49,7 @@ export default class Background extends Base {
 
     // end
     private endSceneStarted: boolean = false;
-    private compensationOffest: number = 0;
+    private compensationOffset: number = 0;
     private curOffset: number = 0;
     private speedK: boolean = false;
     private endStartTs: number;
@@ -68,7 +68,8 @@ export default class Background extends Base {
 
     calculateSnow() {
         if (store.timestampSpan > 1000) return;
-        this.snowDensityAccumulation += SNOW_DENSITY * store.timestampSpan / 1000;
+        const rate = this.endSceneStarted ? 3 : 1;
+        this.snowDensityAccumulation += SNOW_DENSITY * rate * store.timestampSpan / 1000;
         if (this.snowDensityAccumulation >= 1) {
             const newSnowNum = Math.floor(this.snowDensityAccumulation);
             this.snowDensityAccumulation = this.snowDensityAccumulation % 1;
@@ -78,7 +79,7 @@ export default class Background extends Base {
                 random(this.distance + this.width * 2, this.distance - 10),
                 -this.height - 10,
                 random(SNOW_MAX_SIZE, SNOW_MIX_SIZE),
-                random(SNOW_MAX_SPEED, SNOW_MIN_SPEED),
+                random(SNOW_MAX_SPEED, SNOW_MIN_SPEED) * rate,
                 random(SNOW_MAX_OPACITY, SNOW_MIN_OPACITY),
             )));
         }
@@ -182,9 +183,9 @@ export default class Background extends Base {
         let speed = level - 30;
         const avgSpeed = fixLimitInterval(50, 5, speed) / 5;
         store.speed[VALID_USERNAME_LIST[0]] = avgSpeed;
-        if (this.compensationOffest <= -100){
+        if (this.compensationOffset <= -100){
             this.speedK = true;
-        } else if (this.compensationOffest >= 0) {
+        } else if (this.compensationOffset >= 0) {
             this.speedK = false;
         }
         if (this.speedK) {
@@ -192,7 +193,7 @@ export default class Background extends Base {
         } else {
             this.curOffset = random(0, -2);
         }
-        this.compensationOffest += this.curOffset;
+        this.compensationOffset += this.curOffset;
         store.speed[VALID_USERNAME_LIST[1]] = avgSpeed + this.curOffset;
         store.speed.dragon = avgSpeed + 0.1;
     }
@@ -208,8 +209,7 @@ export default class Background extends Base {
     drawLyric() {
         const curTsSpan = store.timestamp - this.endStartTs;
         const curLyric = LYRICS.find(lyric => lyric.ts >= curTsSpan);
-        console.log(curTsSpan);
-        this.ctx.fillStyle = '#6061ff';
+        this.ctx.fillStyle = '#ff4285';
         this.ctx.font='15px Microsoft YaHei';
         this.ctx.textAlign='right';
         this.ctx.fillText(curLyric.lyc, this.distance + this.width, -20);
