@@ -67,13 +67,19 @@ export default abstract class Shape {
         let lastSpeedX = this.speedX;
         // FIXME
         let newSpeedX;
-        // the ACCELERATION should zero when stopped
-        if (this.totalMoveTs <= this.movedTs) {
-            newSpeedX = 0;
+        let newX;
+        if (store.controlLocked) {
+            newSpeedX = store.speed[this.username];
+            newX = this.x + newSpeedX;
         } else {
-            newSpeedX = this.speedX - this.moveDirection * RESISTANCE_ACCELERATION * tsSpan;
+            // the ACCELERATION should zero when stopped
+            if (this.totalMoveTs <= this.movedTs) {
+                newSpeedX = 0;
+            } else {
+                newSpeedX = this.speedX - this.moveDirection * RESISTANCE_ACCELERATION * tsSpan;
+            }
+            newX = this.x + this.moveDirection * ((Math.pow(lastSpeedX, 2) - Math.pow(newSpeedX, 2)) / (2 * RESISTANCE_ACCELERATION));
         }
-        const newX = this.x + this.moveDirection * ((Math.pow(lastSpeedX, 2) - Math.pow(newSpeedX, 2)) / (2 * RESISTANCE_ACCELERATION));
 
         const [x, y, speedX, speedY] = this.checkCrash(newX, newY, newSpeedX, newSpeedY);
         this.x = x;

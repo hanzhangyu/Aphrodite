@@ -2,12 +2,14 @@ import {cloneDeep} from 'lodash';
 import bgData from 'assets/json/background.json';
 import enemy from 'assets/json/enemy.json';
 import Controller from 'classes/Controller';
+import BgAudio from 'classes/BgAudio';
 import Background from 'components/Background';
 import Stage from 'components/Stage';
 import {eventKeyType} from 'utils/decorate';
 import {DATA_TYPE, SOCKET_FETCH_TIMEOUT, VALID_USERNAME_LIST} from 'utils/consts';
 import {delay} from 'utils/helper';
 import bgMusic from 'assets/medias/bgm.mp3';
+import endBgMusic from 'assets/medias/waybackhome.mp3';
 
 const mediaEle = new Audio(bgMusic);
 mediaEle.loop = true;
@@ -49,15 +51,22 @@ class Store {
     private listener: ListenerObject;
     private isDestroy: boolean;
     private lastId: number;
+    public controlLocked: boolean = false;
     public timestamp: number;
     public timestampSpan: number;
     public totalDistance: number = 0; // FIXME
     public readonly events: Array<eventKeyType> = [];
     public readonly bgm: HTMLAudioElement = mediaEle;
+    public readonly endBgm: BgAudio = new BgAudio(endBgMusic);
     public readonly eventsPlayerB: Array<{ts: number, events: Array<eventKeyType>}> = [];
     public controller: Controller;
     public bg: Background;
     public stage: Stage;
+    public speed = {
+        [VALID_USERNAME_LIST[0]]: 0,
+        [VALID_USERNAME_LIST[1]]: 0,
+        dragon: 3,
+    };
 
     constructor() {
         this.state = cloneDeep(INIT_STORE_DATA);
@@ -67,6 +76,7 @@ class Store {
         this.timestamp = 0;
         this.timestampSpan = 0;
         // this.bgm.load();
+        this.endBgm.load();
     }
 
     async playBgm() {
@@ -141,6 +151,11 @@ class Store {
 
     resetState() {
         this.state = cloneDeep(INIT_STORE_DATA);
+    }
+
+    lockControl() {
+        this.controlLocked = true;
+        this.totalDistance = 99999;
     }
 }
 

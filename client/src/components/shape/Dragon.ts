@@ -1,3 +1,5 @@
+import store from 'modules/store';
+
 const SHAPE = '! ((&(&*$($,&.)/-.0,4%3"7$;(@/EAA<?:<9;;88573729/7,6(8&;'
     .split("")
     .map((a, i) => a.charCodeAt(0) - 32);
@@ -10,7 +12,7 @@ export default class Dragon {
     private wingPerpendicular: number = 0;
     private prepare: boolean = false;
 
-    public speed: number = 3;
+    public speed: number;
 
     constructor(
         public ctx: CanvasRenderingContext2D,
@@ -22,6 +24,7 @@ export default class Dragon {
 
     draw() {
         if (!this.prepare) return;
+        this.speed = store.speed.dragon;
         this.ctx.save();
         this.ctx.fillStyle = 'white';
         this.gx += Math.sin(this.direction) * this.speed;
@@ -93,7 +96,7 @@ export default class Dragon {
                 spineNode = this.spine[index * 2 - 83];
 
             } else if (index > 13) {
-                x = 4 + (x - 4) * (Math.sin((-x / 2 + this.pfloat) / 25 * this.speed / 4) + 2);
+                x = 4 + (x - 4) * (Math.sin((-x / 2 + this.pfloat) / 25 * 5 / 4) + 2);
                 spineNode.px = Math.cos(this.wingPerpendicular);
                 spineNode.py = Math.sin(this.wingPerpendicular);
             }

@@ -5,8 +5,8 @@ import Snow from 'components/Snow';
 import House from 'components/House';
 import Dragon from 'components/shape/Dragon';
 import store from 'modules/store';
-import {VALID_USERNAME_LIST} from 'utils/consts';
-import {random, randomInt, delay} from 'utils/helper';
+import {VALID_USERNAME_LIST, LYRICS} from 'utils/consts';
+import {random, randomInt, delay, fixLimitInterval} from 'utils/helper';
 import {
     SNOW_MAX_SPEED,
     SNOW_MIN_SPEED,
@@ -46,6 +46,13 @@ export default class Background extends Base {
     private treeMaxFarDistance: number; // FIXME
     private houseAppearDistance: number; // FIXME
     private introDistanceEnd: boolean = false;
+
+    // end
+    private endSceneStarted: boolean = false;
+    private compensationOffest: number = 0;
+    private curOffset: number = 0;
+    private speedK: boolean = false;
+    private endStartTs: number;
 
     constructor(
         id: number,
@@ -118,7 +125,7 @@ export default class Background extends Base {
         this.dragon.draw();
         this.decorators = this.decorators.filter(decorator => decorator.shouldAlive(this.distance));
         this.calculateSnow();
-        if (this.distance < this.treeMaxFarDistance) {
+        if (this.distance < this.treeMaxFarDistance || this.endSceneStarted) {
             this.calculateTree();
         }
         if (this.distance > this.houseAppearDistance) {
@@ -135,6 +142,10 @@ export default class Background extends Base {
         this.decorators.forEach(decorator => {
             decorator.draw();
         });
+        if (this.endSceneStarted) {
+            this.updateSpeed();
+            this.drawLyric();
+        }
         this.ctx.restore();
     }
 
@@ -144,18 +155,46 @@ export default class Background extends Base {
         await delay(3000);
         this.house.riskGem();
         this.dragon.start();
-        await delay(2000);
+        // await delay(2000);
         this.house.hiddenGem();
-        store.setState('Our gemstone was stolen by this dragon', 'game', VALID_USERNAME_LIST[0], 'talk');
-        await delay(2000);
-        store.setState('Go after it! it is running away', 'game', VALID_USERNAME_LIST[0], 'talk');
-        await delay(1000);
-        store.setState('Ok, let`s go', 'game', VALID_USERNAME_LIST[1], 'talk');
-        await delay(1000);
-        store.setState('', 'game', VALID_USERNAME_LIST[0], 'talk');
-        await delay(1000);
-        store.setState('', 'game', VALID_USERNAME_LIST[1], 'talk');
+        // store.setState('Our gemstone was stolen by this dragon', 'game', VALID_USERNAME_LIST[0], 'talk');
+        // await delay(2000);
+        // store.setState('Go after it! it is running away', 'game', VALID_USERNAME_LIST[0], 'talk');
+        // await delay(1000);
+        // store.setState('Ok, let`s go', 'game', VALID_USERNAME_LIST[1], 'talk');
+        // await delay(1000);
+        // store.setState('', 'game', VALID_USERNAME_LIST[0], 'talk');
+        // await delay(1000);
+        // store.setState('', 'game', VALID_USERNAME_LIST[1], 'talk');
         store.lockControl();
+        store.bgm.pause();
+        this.startEndScene();
+    }
+
+    startEndScene() {
+        this.endSceneStarted = true;
+        store.endBgm.play();
+        this.endStartTs = store.timestamp + 2000;
+    }
+
+    updateSpeed() {
+        const level = store.endBgm.getLevel();
+        let speed = level - 30;
+        const avgSpeed = fixLimitInterval(50, 5, speed) / 5;
+        store.speed[VALID_USERNAME_LIST[0]] = avgSpeed;
+        if (this.compensationOffest <= -100){
+            this.speedK = true;
+        } else if (this.compensationOffest >= 0) {
+            this.speedK = false;
+        }
+        if (this.speedK) {
+            this.curOffset = random(2, 0);
+        } else {
+            this.curOffset = random(0, -2);
+        }
+        this.compensationOffest += this.curOffset;
+        store.speed[VALID_USERNAME_LIST[1]] = avgSpeed + this.curOffset;
+        store.speed.dragon = avgSpeed + 0.1;
     }
 
     isCrash(component: Base): boolean {
@@ -165,4 +204,14 @@ export default class Background extends Base {
     clear() {
         this.ctx.clearRect(this.distance, -this.height, this.width, this.height);
     };
+
+    drawLyric() {
+        const curTsSpan = store.timestamp - this.endStartTs;
+        const curLyric = LYRICS.find(lyric => lyric.ts >= curTsSpan);
+        console.log(curTsSpan);
+        this.ctx.fillStyle = '#6061ff';
+        this.ctx.font='15px Microsoft YaHei';
+        this.ctx.textAlign='right';
+        this.ctx.fillText(curLyric.lyc, this.distance + this.width, -20);
+    }
 }

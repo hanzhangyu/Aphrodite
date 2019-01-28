@@ -31,6 +31,7 @@ class Controller {
     }
 
     onEvent(type: eventKeyType) {
+        if (store.controlLocked) return;
         const now = Date.now();
         if (now - this.eventLastTime[type] > EVENT_TIMEOUT[type]) {
             store.events.push(type);
