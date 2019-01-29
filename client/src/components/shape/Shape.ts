@@ -12,6 +12,7 @@ const fixLimitIntervalSpeed = fixLimitInterval.bind(null, PLAYER_MOVE_INIT_SPEED
 export default abstract class Shape {
     abstract username: string;
     abstract readonly color: string;
+    abstract readonly talkPositionOffset: number;
     protected pointers: Array<[number, number]> = [];
     protected totalMoveTs: number = 0; // the left of moving time
     protected movedTs: number = 0;
@@ -117,7 +118,7 @@ export default abstract class Shape {
         if (talk) {
             this.ctx.font='15px Microsoft YaHei';
             this.ctx.textAlign='center';
-            this.ctx.fillText(talk,this.x + this.width / 2,this.y - 40);
+            this.ctx.fillText(talk,this.x + this.width / 2,this.y - this.talkPositionOffset);
         }
         this.ctx.beginPath();
         this.ctx.moveTo(...this.pointers[0]);

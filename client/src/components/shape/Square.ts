@@ -5,6 +5,7 @@ import {VALID_USERNAME_LIST} from 'utils/consts';
 export default class Square extends Shape {
     public readonly username: string = VALID_USERNAME_LIST[1];
     public readonly color: string = '#ff7aa3';
+    public readonly talkPositionOffset: number = 60;
     constructor(
         public readonly id: number,
         public ctx: CanvasRenderingContext2D,
