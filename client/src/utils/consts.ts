@@ -38,7 +38,7 @@ export enum NOTIFY_TYPE {
     SUCCESS = 'success',
 }
 
-export const VALID_USERNAME_LIST = process.env.username.split('|');
+export const VALID_USERNAME_LIST = process.env.username.split('|') as string[];
 
 export enum EVENT_TYPE {
     shoot,
@@ -61,4 +61,5 @@ export const LYRICS = lyric.split('\n').map(str => {
 });
 
 export const LETTER = process.env.letter;
-console.log(LETTER);
+
+export const END_CHAT = process.env.endChat;

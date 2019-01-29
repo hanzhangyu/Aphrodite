@@ -5,6 +5,10 @@ declare module "*.json" {
 
 declare module '*.mp3';
 
+declare var process: {
+    env: any
+};
+
 interface NavigatorCordova extends Navigator {
     app: {
         exitApp: () => any; // Or whatever is the type of the exitApp function

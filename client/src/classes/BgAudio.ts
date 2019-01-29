@@ -4,6 +4,7 @@ export default class AnalysisAudio {
     private source: AudioBufferSourceNode = null;
     private analyser: AnalyserNode = null;
     private data: Uint8Array = null;
+    public end: boolean = false;
 
     constructor(
         public url: string,
@@ -17,6 +18,9 @@ export default class AnalysisAudio {
         const buffer = await atx.decodeAudioData(arrayBuffer);
         this.analyser = atx.createAnalyser();
         this.source = atx.createBufferSource();
+        this.source.onended = () => {
+            this.end = true;
+        };
         this.source.connect(this.analyser);
         // connect analyser to actual audio-rendering device
         this.analyser.connect(atx.destination);
@@ -26,7 +30,7 @@ export default class AnalysisAudio {
     }
 
     play() {
-        this.source.start(0);
+        this.source.start(0); // test with offset 200
     }
 
     updateData() {

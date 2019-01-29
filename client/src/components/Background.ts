@@ -5,7 +5,7 @@ import Snow from 'components/Snow';
 import House from 'components/House';
 import Dragon from 'components/shape/Dragon';
 import store from 'modules/store';
-import {VALID_USERNAME_LIST, LYRICS} from 'utils/consts';
+import {VALID_USERNAME_LIST, LYRICS, END_CHAT} from 'utils/consts';
 import {random, randomInt, delay, fixLimitInterval} from 'utils/helper';
 import {
     SNOW_MAX_SPEED,
@@ -170,6 +170,19 @@ export default class Background extends Base {
         store.lockControl();
         store.bgm.pause();
         this.startEndScene();
+        store.marquee.init();
+        this.startEndSceneChat();
+    }
+
+    async startEndSceneChat() {
+        const chats = END_CHAT.slice();
+        while (chats.length) {
+            const chat = chats.shift();
+            if (chat.user !== undefined) {
+                store.setState(chat.content, 'game', VALID_USERNAME_LIST[chat.user], 'talk');
+            }
+            await delay(chat.timeout);
+        }
     }
 
     startEndScene() {
@@ -179,6 +192,13 @@ export default class Background extends Base {
     }
 
     updateSpeed() {
+        if (store.endBgm.end) {
+            Object.keys(store.speed).forEach(key => {
+                const speed = store.speed[key];
+                store.speed[key] = (speed > 0 && speed >= 1) ? speed / 2 : 0;
+            });
+            return;
+        }
         const level = store.endBgm.getLevel();
         let speed = level - 30;
         const avgSpeed = fixLimitInterval(50, 5, speed) / 5;
@@ -209,9 +229,10 @@ export default class Background extends Base {
     drawLyric() {
         const curTsSpan = store.timestamp - this.endStartTs;
         const curLyric = LYRICS.find(lyric => lyric.ts >= curTsSpan);
-        this.ctx.fillStyle = '#ff4285';
+        if (!curLyric) return;
+        this.ctx.fillStyle = '#e8b8b8';
         this.ctx.font='15px Microsoft YaHei';
         this.ctx.textAlign='right';
-        this.ctx.fillText(curLyric.lyc, this.distance + this.width, -20);
+        this.ctx.fillText(curLyric.lyc, this.distance + this.width, -5);
     }
 }

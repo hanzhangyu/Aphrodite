@@ -137,4 +137,20 @@ canvas {
 	}
 }
 
+#marquee {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: $indexMarquee;
+	width: 30%;
+	animation: linear 1s riskUp;
+	animation-play-state: paused;
+	transform: translateY(100vh);
+	color: #e8b8b8;
+	font-size: 18px;
+	padding: 0 20px;
+	line-height: 2;
+	background-color: rgba(0, 0, 0, 0.6);
+	text-indent: 2em;
+}
 

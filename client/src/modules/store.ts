@@ -5,6 +5,7 @@ import Controller from 'classes/Controller';
 import BgAudio from 'classes/BgAudio';
 import Background from 'components/Background';
 import Stage from 'components/Stage';
+import marquee from 'modules/marquee';
 import {eventKeyType} from 'utils/decorate';
 import {DATA_TYPE, SOCKET_FETCH_TIMEOUT, VALID_USERNAME_LIST} from 'utils/consts';
 import {delay} from 'utils/helper';
@@ -58,6 +59,7 @@ class Store {
     public readonly events: Array<eventKeyType> = [];
     public readonly bgm: HTMLAudioElement = mediaEle;
     public readonly endBgm: BgAudio = new BgAudio(endBgMusic);
+    public readonly marquee = marquee;
     public readonly eventsPlayerB: Array<{ts: number, events: Array<eventKeyType>}> = [];
     public controller: Controller;
     public bg: Background;
