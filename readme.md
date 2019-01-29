@@ -6,6 +6,10 @@ o(╥﹏╥)o, My monitor was broken.
 
 Sweet game make by cordova.
 
+## DEVELOPMENT
+1. npm run dev in server and client
+2. open browser and goto 8081 or just open your app
+
 # Terms
 
 ##### ~~distance~~(TODO)
