@@ -5,6 +5,8 @@ export interface controllerInterface {
     eventPipe: Controller['onEvent'];
     init: (eventPipe: Controller['onEvent']) => void;
     destroy: () => void;
+    recover: () => void;
+    pause: () => void;
 }
 
 export declare type eventKeyType = keyof typeof EVENT_TYPE;

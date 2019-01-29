@@ -55,7 +55,7 @@ class Store {
     public controlLocked: boolean = false;
     public timestamp: number;
     public timestampSpan: number;
-    public totalDistance: number = 0; // FIXME
+    public totalDistance: number = 300; // FIXME
     public readonly events: Array<eventKeyType> = [];
     public readonly bgm: HTMLAudioElement = mediaEle;
     public readonly endBgm: BgAudio = new BgAudio(endBgMusic);
@@ -158,6 +158,7 @@ class Store {
     lockControl() {
         this.controlLocked = true;
         this.totalDistance = 99999;
+        this.controller.pause();
     }
 }
 

@@ -40,8 +40,4 @@ const notify: notifyInterface = {
     },
 };
 
-// @ts-ignore
-window.$notify = notify;
-console.log(notify);
-
 export default notify;

@@ -135,11 +135,6 @@ export default class Background extends Base {
         if (this.distance >= store.totalDistance) {
             this.introDistanceEnd || this.riskGem();
         }
-        // @ts-ignore
-        if (!window.ddd) {
-            // @ts-ignore
-            window.ddd = this;
-        }
         this.decorators.forEach(decorator => {
             decorator.draw();
         });
@@ -156,17 +151,17 @@ export default class Background extends Base {
         await delay(3000);
         this.house.riskGem();
         this.dragon.start();
-        // await delay(2000);
+        await delay(2000);
         this.house.hiddenGem();
-        // store.setState('Our gemstone was stolen by this dragon', 'game', VALID_USERNAME_LIST[0], 'talk');
-        // await delay(2000);
-        // store.setState('Go after it! it is running away', 'game', VALID_USERNAME_LIST[0], 'talk');
-        // await delay(1000);
-        // store.setState('Ok, let`s go', 'game', VALID_USERNAME_LIST[1], 'talk');
-        // await delay(1000);
-        // store.setState('', 'game', VALID_USERNAME_LIST[0], 'talk');
-        // await delay(1000);
-        // store.setState('', 'game', VALID_USERNAME_LIST[1], 'talk');
+        store.setState('Our gemstone was stolen by this dragon', 'game', VALID_USERNAME_LIST[0], 'talk');
+        await delay(2000);
+        store.setState('Go after it! it is running away', 'game', VALID_USERNAME_LIST[0], 'talk');
+        await delay(1000);
+        store.setState('Ok, let`s go', 'game', VALID_USERNAME_LIST[1], 'talk');
+        await delay(1000);
+        store.setState('', 'game', VALID_USERNAME_LIST[0], 'talk');
+        await delay(1000);
+        store.setState('', 'game', VALID_USERNAME_LIST[1], 'talk');
         store.lockControl();
         store.bgm.pause();
         this.startEndScene();

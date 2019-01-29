@@ -10,7 +10,7 @@
 	<title>My App</title>
 	<style>
 		.hidden {
-			display: none;
+			display: none !important;
 		}
 	</style>
 	<!-- built style files will be auto injected -->
@@ -21,9 +21,9 @@
 		<button class="btn btn-action" id="shoot">A</button>
 		<button class="btn btn-action" id="jump">B</button>
 		<button class="btn btn-action" id="skill">C</button>
-		<button class="btn btn-action active" id="ult">D</button>
-		<button class="btn btn-direct" id="move_left"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
-		<button class="btn btn-direct active" id="move_right"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+		<button class="btn btn-action" id="ult">D</button>
+		<button class="btn btn-direct" id="left"><i class="fa fa-arrow-left" aria-hidden="true"></i></button>
+		<button class="btn btn-direct" id="right"><i class="fa fa-arrow-right" aria-hidden="true"></i></button>
 	</div>
 	<div id="notify" class="hidden"></div>
 	<div id="marquee" class="hidden"></div>

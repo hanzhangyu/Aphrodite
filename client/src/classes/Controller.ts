@@ -8,7 +8,7 @@ import store from 'modules/store';
 import controllerKey from 'modules/controller.key';
 import controllerTouch from 'modules/controller.touch';
 
-const isTouch: boolean = ('ontouchend' in document) && false; // FIXME
+const isTouch: boolean = ('ontouchend' in document); // FIXME && false
 const currentController = isTouch ? controllerTouch : controllerKey;
 
 const INIT_TIME = {
@@ -21,17 +21,25 @@ const INIT_TIME = {
 };
 
 class Controller {
+    private readonly currentController = currentController;
     private eventLastTime: {
         [key in eventKeyType]: number
     };
 
     constructor() {
-        currentController.init(this.onEvent.bind(this));
+        this.currentController.init(this.onEvent.bind(this));
         this.eventLastTime = cloneDeep(INIT_TIME);
     }
 
+    pause() {
+        this.currentController.pause();
+    }
+
+    recover() {
+        this.currentController.recover();
+    }
+
     onEvent(type: eventKeyType) {
-        if (store.controlLocked) return;
         const now = Date.now();
         if (now - this.eventLastTime[type] > EVENT_TIMEOUT[type]) {
             store.events.push(type);
@@ -41,7 +49,7 @@ class Controller {
 
     destroy() {
         this.eventLastTime = cloneDeep(INIT_TIME);
-        currentController.destroy();
+        this.currentController.destroy();
     }
 
 

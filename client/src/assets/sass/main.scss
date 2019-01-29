@@ -28,12 +28,20 @@ canvas {
 	z-index: $indexStage;
 }
 
+#control {
+	z-index: $indexControl;
+	position: fixed;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
 .btn {
 	position: absolute;
 	outline: none;
     background-color: $buttonBgColor;
 	border: 5px solid $buttonBgColor;
-	z-index: $indexControl;
 
 	&.active {
 		border-color: $buttonActiveBgColor;
@@ -41,6 +49,12 @@ canvas {
 		i {
 			color: $buttonActiveBgColor;
 		}
+	}
+
+	&.disabled {
+		background-color: rgba(255, 255, 255, 0.1);
+		border-color: rgba(255, 255, 255, 0.3);
+		color: rgba(255, 255, 255, 0.4);
 	}
 }
 
@@ -86,14 +100,14 @@ canvas {
 	}
 }
 
-#move_left {
+#left {
 	border-top-left-radius: 40px;
 	border-bottom-left-radius: 40px;
 	bottom: 40px;
 	left: 20px;
 }
 
-#move_right {
+#right {
 	border-top-right-radius: 40px;
 	border-bottom-right-radius: 40px;
 	bottom: 40px;

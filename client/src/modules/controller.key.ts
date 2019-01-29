@@ -39,6 +39,12 @@ const keyController: controllerKeyInterface = {
                 break;
         }
     },
+    recover() {
+
+    },
+    pause() {
+
+    },
     destroy() {
         document.removeEventListener('keydown', this.handleKeyDown, false);
         this.eventPipe = null;
