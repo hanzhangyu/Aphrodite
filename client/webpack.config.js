@@ -69,7 +69,7 @@ let config = function (env) {
       new webpack.DefinePlugin({
         'process.env': {
           'NODE_ENV': JSON.stringify(envName),
-          ...Object.assign({}, ...Object.entries(envConfig[envName]).map((keyValue)  => {
+          ...Object.assign({}, ...Object.entries(envConfig.default).concat(Object.entries(envConfig[envName])).map((keyValue)  => {
             return {[keyValue[0]]: JSON.stringify(keyValue[1])}
           })),
         }
@@ -78,6 +78,9 @@ let config = function (env) {
         filename: 'index.html',
         template: 'src/index.html',
         inject: true,
+        meta: {
+          // 'Content-Security-Policy': { 'http-equiv': 'Content-Security-Policy', 'content': 'default-src https:' }
+        },
         minify: {
           removeComments: true,
           removeScriptTypeAttributes: true,
