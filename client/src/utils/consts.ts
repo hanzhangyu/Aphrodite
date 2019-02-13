@@ -39,6 +39,7 @@ export enum NOTIFY_TYPE {
 }
 
 export const VALID_USERNAME_LIST = process.env.username.split('|') as string[];
+console.log(VALID_USERNAME_LIST);
 
 export enum EVENT_TYPE {
     shoot = 'shoot',

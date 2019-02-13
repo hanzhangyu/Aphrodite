@@ -117,7 +117,7 @@ export default class Background extends Base {
             if (!this.isReady) {
                 return;
             } else {
-                store.getState('antherPlayerUsername') === VALID_USERNAME_LIST[0] && store.playBgm(); // FIXME remove condition
+                store.playBgm();
             }
         }
         this.ctx.save();

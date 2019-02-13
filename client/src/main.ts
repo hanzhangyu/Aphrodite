@@ -32,15 +32,7 @@ store.bg = new Background(0, store.getState('context', CANVAS_TYPE.TYPE_BG));
 store.stage = new Stage(0, store.getState('context', CANVAS_TYPE.TYPE_STAGE));
 
 serverApi.init().then(async () => {
-    // const username = await askForName();
-    //FIXME remove start
-    let username = '123';
-    if (localStorage.getItem('test') === '123') {
-        username = '321';
-    }
-    localStorage.setItem('test', username);
-    await serverApi.checkName(username);
-    //FIXME remove end
+    const username = await askForName();
     store.setState(true, 'game', username, 'exist');
     const overload = await checkOverload();
     if (overload || store.getState('destroyed')) return;

@@ -55,7 +55,7 @@ class Store {
     public controlLocked: boolean = false;
     public timestamp: number;
     public timestampSpan: number;
-    public totalDistance: number = 300; // FIXME
+    public totalDistance: number = 3000;
     public readonly events: Array<eventKeyType> = [];
     public readonly bgm: HTMLAudioElement = mediaEle;
     public readonly endBgm: BgAudio = new BgAudio(endBgMusic);
