@@ -7,3 +7,4 @@ client/env.yml
 
 server/node_modules/
 server/env.yml
+server/deploy.sh
